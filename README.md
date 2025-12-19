@@ -1,6 +1,5 @@
 # NiRos-Template
-### راهنما هست تو خود کد و میتونید راحت شخصی سازی کنید
-❤️
+### راهنما هست تو خود کد و میتونید راحت شخصی سازی کنید❤️
 ### در لاین 444 میتونید کلمه NIROS رو تغییر دهید
 ### Template for rebecca and marzban panel
 ![Preview](https://github.com/Deepside-607/Deepnus-Template/blob/main/IMG_20251219_211847_674.jpg?raw=true)

@@ -25,7 +25,7 @@
         :root {
             --font-fa: 'Vazirmatn', sans-serif;
             --font-en: 'Outfit', sans-serif;
-            --font-ru: 'Rubik', sans-serif; /* Added for Russian */
+            --font-ru: 'Rubik', sans-serif;
 
             /* Dark Mode (Nebula Theme) */
             --bg-deep: #000000;
@@ -441,7 +441,7 @@
         <nav class="navbar">
             <div class="logo-area">
                 <i class="ri-radar-fill logo-icon"></i>
-                <span class="logo-text">NI<span style="color:var(--accent)">ROS</span></span>
+                <span class="logo-text">Ni<span style="color:var(--accent)">Ros</span></span>
             </div>
             <div class="nav-actions">
                 <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">
@@ -470,6 +470,27 @@
 
         <!-- STATS DASHBOARD -->
         <div class="stats-container">
+            <!-- Time (Moved to Right via RTL First-Child Logic) -->
+            <div class="stat-card">
+                <div style="position:relative; width:100px; height:100px;">
+                    <svg class="progress-circle">
+                        <defs>
+                            <linearGradient id="gradientTime" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#06b6d4" />
+                                <stop offset="100%" stop-color="#10b981" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-bar time-stroke" id="time-bar" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="stat-content">
+                        <span class="stat-num" id="ui-days">∞</span>
+                        <span class="stat-label" data-translate="days">Days</span>
+                    </div>
+                </div>
+                <div class="stat-footer" data-translate="remaining">Remaining</div>
+            </div>
+
             <!-- Traffic -->
             <div class="stat-card">
                 <div style="position:relative; width:100px; height:100px;">
@@ -489,27 +510,6 @@
                     </div>
                 </div>
                 <div class="stat-footer" id="ui-total">Total: ∞</div>
-            </div>
-
-            <!-- Time -->
-            <div class="stat-card">
-                <div style="position:relative; width:100px; height:100px;">
-                    <svg class="progress-circle">
-                        <defs>
-                            <linearGradient id="gradientTime" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#06b6d4" />
-                                <stop offset="100%" stop-color="#10b981" />
-                            </linearGradient>
-                        </defs>
-                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                        <circle class="circle-bar time-stroke" id="time-bar" cx="50" cy="50" r="45"></circle>
-                    </svg>
-                    <div class="stat-content">
-                        <span class="stat-num" id="ui-days">∞</span>
-                        <span class="stat-label" data-translate="days">Days</span>
-                    </div>
-                </div>
-                <div class="stat-footer" data-translate="remaining">Remaining</div>
             </div>
         </div>
 

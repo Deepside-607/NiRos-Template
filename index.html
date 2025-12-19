@@ -597,25 +597,25 @@
         // --- TRANSLATIONS (Expanded to 4 Languages) ---
         const i18n = {
             fa: {
-                active: "فعال", limited: "محدود", expired: "منقضی",
+                active: "فعال", limited: "محدود", expired: "منقضی", disabled: "غیرفعال",
                 days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
                 connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
                 copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl"
             },
             en: {
-                active: "Active", limited: "Limited", expired: "Expired",
+                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled",
                 days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
                 connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
                 copied: "Copied!", scan: "Scan QR", dir: "ltr"
             },
             ru: {
-                active: "Активный", limited: "Лимит", expired: "Истек",
+                active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено",
                 days: "дней", remaining: "Осталось", copy_link: "Ссылка подписки",
                 connections: "Конфигурации", copy_all: "Копировать все", downloads: "Приложения",
                 copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr"
             },
             ar: {
-                active: "نشط", limited: "محدود", expired: "منتهية",
+                active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل",
                 days: "أيام", remaining: "متبقي", copy_link: "نسخ الرابط",
                 connections: "الاتصالات", copy_all: "نسخ الكل", downloads: "تنزيل",
                 copied: "تم النسخ!", scan: "مسح QR", dir: "rtl"
@@ -637,34 +637,31 @@
             // Username
             document.getElementById('ui-username').textContent = core.user;
 
-            // Status Logic (Visual Override)
+            // Status Logic (Strict Backend Priority)
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
             stPill.className = 'status-pill'; // reset class
             
-            // Basic status from backend
+            // Start with backend status as source of truth
             let visualStatus = core.status;
             
-            // Calculate time manually to override status if needed
+            // Calculate time manually for the countdown and expiration check
             let daysLeft = 0;
             const expire = parseFloat(core.expire) || 0;
+            
             if (expire) {
                 const now = Math.floor(Date.now() / 1000);
                 const diff = expire - now;
-                // If diff is positive (even 1 second), it is NOT expired visually for us.
                 if (diff > 0) {
                      daysLeft = Math.ceil(diff / 86400);
-                     // Force active if days are left, unless it is volume limited
-                     if (core.status !== 'limited') {
-                         visualStatus = 'active';
-                     }
+                     // Note: We do NOT force 'active' here. We respect if backend says 'disabled' or 'limited'.
                 } else {
+                    // Only override status if time is actually up, but don't override 'disabled' if you want to be strict.
+                    // Usually, if expired, it should show expired.
                     visualStatus = 'expired';
                 }
             } else {
-                // Unlimited time
                 daysLeft = Infinity;
-                if (core.status !== 'limited') visualStatus = 'active';
             }
 
             // Apply Status Class & Text
@@ -675,8 +672,10 @@
                 stPill.classList.add('st-limited');
                 stText.textContent = i18n[currentLang].limited;
             } else {
+                // Covers expired and disabled (Red color)
                 stPill.classList.add('st-expired');
-                stText.textContent = i18n[currentLang].expired;
+                // Use specific text if available
+                stText.textContent = (visualStatus === 'disabled') ? i18n[currentLang].disabled : i18n[currentLang].expired;
             }
 
             // Stats

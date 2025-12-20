@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>UserPanel</title>
     <meta name="theme-color" content="#09090b">
-    
     <!-- Fonts -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
-    
     <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    
     <!-- QR Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <style>
         /* 
          * ============================================================
@@ -26,35 +22,27 @@
             --font-fa: 'Vazirmatn', sans-serif;
             --font-en: 'Outfit', sans-serif;
             --font-ru: 'Rubik', sans-serif;
-
             /* Dark Mode (Nebula Theme) */
             --bg-deep: #000000;
             --bg-surface: #09090b;
             --glass-base: rgba(20, 20, 25, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-highlight: rgba(255, 255, 255, 0.05);
-
             --primary: #6366f1;       /* Indigo */
             --primary-glow: rgba(99, 102, 241, 0.5);
-            
             --accent: #ec4899;        /* Pink */
             --accent-glow: rgba(236, 72, 153, 0.5);
-            
             --cyan: #06b6d4;          /* Cyan */
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-
             --text-main: #ffffff;
             --text-muted: #9ca3af;
-            
             --card-radius: 24px;
             --btn-radius: 16px;
-            
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.6);
             --neon-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         }
-
         /* Light Mode (Holo White) */
         body.light-theme {
             --bg-deep: #f0f2f5;
@@ -62,25 +50,20 @@
             --glass-base: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(0, 0, 0, 0.05);
             --glass-highlight: rgba(0, 0, 0, 0.02);
-
             --primary: #4f46e5;
             --primary-glow: rgba(79, 70, 229, 0.2);
             --accent: #db2777;
-            
             --text-main: #1f2937;
             --text-muted: #6b7280;
-            
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.1);
             --neon-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
         }
-
         /* 
          * ============================================================
          *  RESET & BASE
          * ============================================================
          */
         *, *::before, *::after { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        
         body {
             margin: 0; padding: 0;
             font-family: var(--font-fa);
@@ -91,7 +74,6 @@
             overflow-x: hidden;
             transition: background 0.5s ease;
         }
-
         /* 
          * ============================================================
          *  ANIMATED BACKGROUND (THE SOUL)
@@ -109,12 +91,10 @@
         .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; animation-duration: 12s; }
         .orb-2 { width: 250px; height: 250px; background: var(--accent); bottom: -50px; right: -50px; animation-duration: 15s; animation-delay: -2s; }
         .orb-3 { width: 200px; height: 200px; background: var(--cyan); top: 40%; left: 40%; animation-duration: 18s; opacity: 0.4; }
-
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(30px, 50px) scale(1.1); }
         }
-
         /* 
          * ============================================================
          *  LAYOUT CONTAINER
@@ -125,7 +105,6 @@
             padding: 25px; padding-bottom: 120px;
             position: relative; z-index: 10;
         }
-
         /* 
          * ============================================================
          *  HEADER & NAV
@@ -141,9 +120,7 @@
             animation: spinSlow 10s linear infinite;
         }
         @keyframes spinSlow { 100% { transform: rotate(360deg); } }
-        
         .logo-text { font-family: var(--font-en); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; }
-
         .nav-actions { display: flex; gap: 10px; }
         .icon-btn {
             width: 44px; height: 44px; border-radius: 14px;
@@ -165,7 +142,6 @@
             font-size: 0.6rem; background: var(--primary); color: #fff;
             padding: 2px 4px; border-radius: 4px; font-weight: bold;
         }
-
         /* 
          * ============================================================
          *  PROFILE HERO CARD (GLASSMOPHISM)
@@ -184,7 +160,6 @@
             margin-bottom: 25px;
             animation: slideUp 0.6s ease-out;
         }
-        
         /* Shimmer Effect */
         .hero-card::before {
             content: ''; position: absolute; top: 0; left: -100%;
@@ -194,7 +169,6 @@
             animation: shimmer 6s infinite; pointer-events: none;
         }
         @keyframes shimmer { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
-
         .avatar-wrapper {
             width: 90px; height: 90px; margin: 0 auto 15px;
             border-radius: 50%; padding: 4px;
@@ -206,14 +180,12 @@
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
         .avatar-inner i { font-size: 3rem; color: var(--text-main); }
-        
         .username { 
             font-size: 1.5rem; font-weight: 800; margin: 0; 
             background: linear-gradient(to right, #fff, #b8b8b8);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         body.light-theme .username { background: linear-gradient(to right, #333, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
         .status-pill {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 10px; padding: 6px 16px;
@@ -223,11 +195,9 @@
         }
         body.light-theme .status-pill { background: #fff; border-color: #eee; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; box-shadow: 0 0 8px currentColor; }
-        
         .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); }
         .st-limited { color: var(--warning); } .st-limited .status-dot { background: var(--warning); }
         .st-expired { color: var(--danger); } .st-expired .status-dot { background: var(--danger); }
-
         /* 
          * ============================================================
          *  DASHBOARD STATS (CIRCULAR)
@@ -247,11 +217,9 @@
             transition: 0.3s;
         }
         .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-
         .progress-circle { width: 100px; height: 100px; transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 8; }
         body.light-theme .circle-bg { stroke: rgba(0,0,0,0.05); }
-        
         .circle-bar {
             fill: none; stroke-width: 8; stroke-linecap: round;
             stroke-dasharray: 283; /* 2*pi*45 */
@@ -260,7 +228,6 @@
         }
         .traffic-stroke { stroke: url(#gradientTraffic); }
         .time-stroke { stroke: url(#gradientTime); }
-
         .stat-content {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -269,7 +236,6 @@
         .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
         .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-
         /* 
          * ============================================================
          *  ACTION BUTTONS (GLOWING)
@@ -282,7 +248,6 @@
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: 0.3s; position: relative; overflow: hidden;
         }
-        
         .btn-primary {
             background: var(--primary); color: #fff;
             box-shadow: 0 8px 25px -5px var(--primary-glow);
@@ -291,13 +256,11 @@
             transform: translateY(-2px); box-shadow: 0 15px 30px -5px var(--primary-glow);
             filter: brightness(1.1);
         }
-        
         .btn-glass {
             background: rgba(255,255,255,0.05); color: var(--text-main);
             border: 1px solid var(--glass-border);
         }
         .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--text-main); }
-
         /* 
          * ============================================================
          *  CONNECTIONS & APPS (ACCORDION & CARDS)
@@ -312,10 +275,8 @@
         .section-title i { color: var(--accent); }
         .toggle-arrow { transition: 0.3s; }
         .active-section .toggle-arrow { transform: rotate(180deg); color: var(--primary); }
-
         .section-content { display: none; animation: fadeIn 0.4s ease; }
         .section-content.open { display: block; }
-
         .btn-copy-all {
             width: 100%; padding: 12px; margin-bottom: 15px;
             background: rgba(16, 185, 129, 0.1); color: var(--success);
@@ -324,7 +285,6 @@
             transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-copy-all:hover { background: var(--success); color: #fff; }
-
         .config-card {
             background: var(--glass-base); border: 1px solid var(--glass-border);
             padding: 16px; border-radius: 18px; margin-bottom: 10px;
@@ -338,25 +298,21 @@
         }
         .config-card:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.2); }
         .config-card:hover::after { transform: scaleX(1); }
-
         .prot-icon {
             width: 42px; height: 42px; border-radius: 12px;
             background: rgba(255,255,255,0.05); color: var(--text-main);
             display: flex; align-items: center; justify-content: center;
             font-weight: 800; font-size: 0.75rem; border: 1px solid var(--glass-border);
         }
-        
         .conf-info { flex: 1; overflow: hidden; }
         .conf-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .conf-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
-
         .action-icon {
             width: 38px; height: 38px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.2s; background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem;
         }
         .action-icon:hover { background: var(--bg-surface); color: var(--text-main); transform: scale(1.1); }
-
         /* App Grid */
         .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .app-card {
@@ -370,7 +326,6 @@
         .app-card:hover i { color: var(--cyan); }
         .app-name { font-size: 0.9rem; font-weight: 700; }
         .app-os { font-size: 0.75rem; color: var(--text-muted); }
-
         /* 
          * ============================================================
          *  MODAL & TOAST (ALERTS)
@@ -385,7 +340,6 @@
             transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; opacity: 0;
         }
         .toast-box.active { transform: translateX(-50%) translateY(0); opacity: 1; }
-
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
@@ -402,13 +356,10 @@
         }
         .modal-overlay.active .modal-body { transform: scale(1) translateY(0); }
         #qr-display { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: fit-content; }
-
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         /* Utilities */
         .hidden-elm { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-        
         /* Language Specifics */
         body.lang-en { direction: ltr; font-family: var(--font-en); }
         body.lang-ru { direction: ltr; font-family: var(--font-ru); }
@@ -416,7 +367,6 @@
     </style>
 </head>
 <body>
-
     <!-- SAFE DATA STORE: Prevents Jinja2 500 Errors by using defaults -->
     <div id="data-core" 
          data-user="{{ user.username | default('User') }}"
@@ -427,16 +377,13 @@
          data-sub="{{ subscription_url | default('') }}"
          style="display:none;">
     </div>
-
     <!-- BACKGROUND ANIMATION -->
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
-
     <div class="main-container">
-        
         <!-- NAVBAR -->
         <nav class="navbar">
             <div class="logo-area">
@@ -453,7 +400,6 @@
                 </button>
             </div>
         </nav>
-
         <!-- HERO PROFILE -->
         <div class="hero-card">
             <div class="avatar-wrapper">
@@ -467,7 +413,6 @@
                 <span id="ui-status">Unknown</span>
             </div>
         </div>
-
         <!-- STATS DASHBOARD -->
         <div class="stats-container">
             <!-- Time (Moved to Right via RTL First-Child Logic) -->
@@ -490,7 +435,6 @@
                 </div>
                 <div class="stat-footer" data-translate="remaining">Remaining</div>
             </div>
-
             <!-- Traffic -->
             <div class="stat-card">
                 <div style="position:relative; width:100px; height:100px;">
@@ -512,7 +456,6 @@
                 <div class="stat-footer" id="ui-total">Total: ∞</div>
             </div>
         </div>
-
         <!-- MAIN ACTIONS -->
         <div class="main-actions">
             <button class="btn-glow btn-primary" onclick="copyLink()">
@@ -523,7 +466,6 @@
                 <i class="ri-qr-code-line" style="font-size:1.2rem;"></i>
             </button>
         </div>
-
         <!-- CONFIGS -->
         <div class="section-box">
             <div class="section-header" onclick="toggleSection('configs-area', this)">
@@ -542,7 +484,6 @@
                 </div>
             </div>
         </div>
-
         <!-- APPS -->
         <div class="section-box">
             <div class="section-header" onclick="toggleSection('apps-area', this)">
@@ -574,15 +515,12 @@
                 </div>
             </div>
         </div>
-
     </div>
-
     <!-- NOTIFICATIONS -->
     <div class="toast-box" id="toast">
         <i class="ri-checkbox-circle-fill"></i>
         <span id="toast-msg">Copied successfully!</span>
     </div>
-
     <!-- MODAL -->
     <div class="modal-overlay" id="modal" onclick="closeModal()">
         <div class="modal-body" onclick="event.stopPropagation()">
@@ -592,99 +530,103 @@
             <button class="btn-glow btn-glass" style="width:100%" onclick="closeModal()">Close</button>
         </div>
     </div>
-
     <script>
         // --- TRANSLATIONS (Expanded to 4 Languages) ---
         const i18n = {
             fa: {
-                active: "فعال", limited: "محدود", expired: "منقضی", disabled: "غیرفعال",
+                active: "فعال", limited: "محدود شده", expired: "منقضی", disabled: "غیرفعال", pending: "در انتظار",
                 days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
                 connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
                 copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl"
             },
             en: {
-                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled",
+                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled", pending: "Pending",
                 days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
                 connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
                 copied: "Copied!", scan: "Scan QR", dir: "ltr"
             },
             ru: {
-                active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено",
+                active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено", pending: "В ожидании",
                 days: "дней", remaining: "Осталось", copy_link: "Ссылка подписки",
                 connections: "Конфигурации", copy_all: "Копировать все", downloads: "Приложения",
                 copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr"
             },
             ar: {
-                active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل",
+                active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل", pending: "قيد الانتظار",
                 days: "أيام", remaining: "متبقي", copy_link: "نسخ الرابط",
                 connections: "الاتصالات", copy_all: "نسخ الكل", downloads: "تنزيل",
                 copied: "تم النسخ!", scan: "مسح QR", dir: "rtl"
             }
         };
-
         const supportedLangs = ['fa', 'en', 'ru', 'ar'];
-
+        
         // --- APP LOGIC ---
         const core = document.getElementById('data-core').dataset;
         let currentLang = localStorage.getItem('lang') || 'fa';
         let currentTheme = localStorage.getItem('theme') || 'dark';
-
+        
         // 1. INIT
         function init() {
             setTheme(currentTheme);
             setLang(currentLang);
-            
             // Username
             document.getElementById('ui-username').textContent = core.user;
-
-            // Status Logic (Strict Backend Priority)
+            
+            // --- STATUS LOGIC (Strictly from Jinja) ---
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
-            stPill.className = 'status-pill'; // reset class
+            stPill.className = 'status-pill'; // Reset classes
             
-            // Start with backend status as source of truth
-            let visualStatus = core.status;
+            // Get raw status from Jinja, normalize it
+            let visualStatus = (core.status || 'active').toLowerCase().trim();
             
-            // Calculate time manually for the countdown and expiration check
+            // Handle variations
+            if (visualStatus === 'true' || visualStatus === 'on' || visualStatus === 'enable') visualStatus = 'active';
+            if (visualStatus === 'false' || visualStatus === 'off') visualStatus = 'disabled';
+            
+            // Calculate time manually ONLY for the countdown display
             let daysLeft = 0;
             const expire = parseFloat(core.expire) || 0;
-            
             if (expire) {
                 const now = Math.floor(Date.now() / 1000);
                 const diff = expire - now;
                 if (diff > 0) {
                      daysLeft = Math.ceil(diff / 86400);
-                     // Note: We do NOT force 'active' here. We respect if backend says 'disabled' or 'limited'.
                 } else {
-                    // Only override status if time is actually up, but don't override 'disabled' if you want to be strict.
-                    // Usually, if expired, it should show expired.
-                    visualStatus = 'expired';
+                    daysLeft = 0;
                 }
             } else {
                 daysLeft = Infinity;
             }
-
-            // Apply Status Class & Text
-            if(visualStatus === 'active') {
-                stPill.classList.add('st-active');
+            
+            // Apply Status Class & Text based ONLY on visualStatus (Jinja)
+            if (visualStatus === 'active') {
+                stPill.classList.add('st-active'); // Green
                 stText.textContent = i18n[currentLang].active;
-            } else if(visualStatus === 'limited') {
-                stPill.classList.add('st-limited');
+            } else if (visualStatus === 'limited') {
+                stPill.classList.add('st-limited'); // Orange
                 stText.textContent = i18n[currentLang].limited;
+            } else if (visualStatus === 'expired') {
+                stPill.classList.add('st-expired'); // Red
+                stText.textContent = i18n[currentLang].expired;
+            } else if (visualStatus === 'disabled') {
+                stPill.classList.add('st-expired'); // Red
+                stText.textContent = i18n[currentLang].disabled;
+            } else if (visualStatus === 'pending') {
+                stPill.classList.add('st-limited'); // Orange/Yellow
+                stText.textContent = i18n[currentLang].pending;
             } else {
-                // Covers expired and disabled (Red color)
+                // Fallback for unknown statuses
                 stPill.classList.add('st-expired');
-                // Use specific text if available
-                stText.textContent = (visualStatus === 'disabled') ? i18n[currentLang].disabled : i18n[currentLang].expired;
+                stText.textContent = visualStatus;
             }
-
+            
             // Stats
             renderStats(daysLeft, expire);
-
             // Configs
             fetchConfigs();
         }
-
+        
         // 2. STATS RENDERER
         function formatBytes(bytes) {
             if (!+bytes) return '0 MB';
@@ -692,22 +634,17 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
-
         function renderStats(daysLeft, expireTimestamp) {
             const used = parseFloat(core.used) || 0;
             const limit = parseFloat(core.limit) || 0;
-
             // Traffic
             document.getElementById('ui-used').textContent = formatBytes(used);
             document.getElementById('ui-total').textContent = limit ? `Total: ${formatBytes(limit)}` : 'Unlimited Data';
-            
             const trPercent = limit ? Math.min((used/limit)*100, 100) : 0;
             animateCircle('traffic-bar', trPercent);
-
             // Time
             if(expireTimestamp) {
                 document.getElementById('ui-days').textContent = daysLeft;
-                // Visual logic: < 5 days = red, else green. Circle always 75% filled for aesthetics if active
                 const timeP = daysLeft > 0 ? 75 : 0; 
                 animateCircle('time-bar', timeP);
             } else {
@@ -715,7 +652,6 @@
                 animateCircle('time-bar', 100);
             }
         }
-
         function animateCircle(id, percent) {
             setTimeout(() => {
                 const circle = document.getElementById(id);
@@ -725,37 +661,32 @@
                 circle.style.strokeDashoffset = offset;
             }, 300);
         }
-
+        
         // 3. CONFIG PARSING
         function fetchConfigs() {
             let url = core.sub;
             if(!url) url = window.location.href;
-
             fetch(url).then(r => r.text()).then(txt => {
                 let decoded = txt;
                 try {
                     const clean = txt.replace(/\s/g, '');
                     if (/^[A-Za-z0-9+/=]+$/.test(clean)) decoded = atob(clean);
                 } catch(e){}
-
                 const lines = decoded.split(/\r?\n/).filter(x => x.trim().length > 5);
                 renderConfigList(lines);
             }).catch(() => {
                 document.getElementById('config-list').innerHTML = `<div style="text-align:center; color:var(--danger)">Error loading configs</div>`;
             });
         }
-
         function renderConfigList(lines) {
             const container = document.getElementById('config-list');
             container.innerHTML = '';
-            
             lines.forEach((line, i) => {
                 let proto = line.split('://')[0].toUpperCase();
                 let name = `Config ${i+1}`;
                 if(line.includes('#')) {
                     try { name = decodeURIComponent(line.split('#').pop()); } catch(e){}
                 }
-
                 const card = document.createElement('div');
                 card.className = 'config-card';
                 card.innerHTML = `
@@ -771,20 +702,18 @@
                 container.appendChild(card);
             });
         }
-
+        
         // 4. UTILS
         function copyLink() {
             let url = core.sub || window.location.href;
             copyTxt(url);
         }
-
         function copyAll() {
             const targets = document.querySelectorAll('.copy-target');
             let all = "";
             targets.forEach(t => all += t.value + "\n");
             if(all) copyTxt(all);
         }
-
         function copyTxt(txt) {
             if(navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(txt).then(showToast).catch(() => fallbackCopy(txt));
@@ -798,14 +727,12 @@
             ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
             showToast();
         }
-
         function showToast() {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').textContent = i18n[currentLang].copied;
             t.classList.add('active');
             setTimeout(() => t.classList.remove('active'), 2000);
         }
-
         function showMainQR() { showQR(core.sub || window.location.href); }
         function showQR(txt) {
             const el = document.getElementById('qr-display');
@@ -814,13 +741,11 @@
             document.getElementById('modal').classList.add('active');
         }
         function closeModal() { document.getElementById('modal').classList.remove('active'); }
-
         function toggleSection(id, header) {
             const el = document.getElementById(id);
             el.classList.toggle('open');
             header.classList.toggle('active-section');
         }
-
         function toggleTheme() {
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', currentTheme);
@@ -835,7 +760,6 @@
                 document.getElementById('theme-icon').className = 'ri-moon-clear-line';
             }
         }
-
         function cycleLang() {
             const idx = supportedLangs.indexOf(currentLang);
             const nextIdx = (idx + 1) % supportedLangs.length;
@@ -844,21 +768,16 @@
             setLang(currentLang);
             init(); // Re-render logic/text
         }
-
         function setLang(l) {
             document.documentElement.dir = i18n[l].dir;
             document.body.className = document.body.className.replace(/lang-\w+/, '') + ` lang-${l}`;
             document.getElementById('current-lang-badge').textContent = l.toUpperCase();
-            
-            // Text Updates
             document.querySelectorAll('[data-translate]').forEach(el => {
                 const k = el.getAttribute('data-translate');
                 if(i18n[l][k]) el.textContent = i18n[l][k];
             });
         }
-
         window.onload = init;
-
     </script>
 </body>
 </html>

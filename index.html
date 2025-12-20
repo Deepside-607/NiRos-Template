@@ -22,17 +22,15 @@
             --font-fa: 'Vazirmatn', sans-serif;
             --font-en: 'Outfit', sans-serif;
             --font-ru: 'Rubik', sans-serif;
-            /* Dark Mode (Nebula Theme) */
+            /* Dark Mode */
             --bg-deep: #000000;
             --bg-surface: #09090b;
             --glass-base: rgba(20, 20, 25, 0.65);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.05);
-            --primary: #6366f1;       /* Indigo */
+            --primary: #6366f1;
             --primary-glow: rgba(99, 102, 241, 0.5);
-            --accent: #ec4899;        /* Pink */
-            --accent-glow: rgba(236, 72, 153, 0.5);
-            --cyan: #06b6d4;          /* Cyan */
+            --accent: #ec4899;
+            --cyan: #06b6d4;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -43,13 +41,12 @@
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.6);
             --neon-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         }
-        /* Light Mode (Holo White) */
+        /* Light Mode */
         body.light-theme {
             --bg-deep: #f0f2f5;
             --bg-surface: #ffffff;
             --glass-base: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(0, 0, 0, 0.05);
-            --glass-highlight: rgba(0, 0, 0, 0.02);
             --primary: #4f46e5;
             --primary-glow: rgba(79, 70, 229, 0.2);
             --accent: #db2777;
@@ -58,67 +55,27 @@
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.1);
             --neon-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
         }
-        /* 
-         * ============================================================
-         *  RESET & BASE
-         * ============================================================
-         */
+        /* BASE */
         *, *::before, *::after { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body {
-            margin: 0; padding: 0;
-            font-family: var(--font-fa);
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex; justify-content: center;
-            overflow-x: hidden;
-            transition: background 0.5s ease;
+            margin: 0; padding: 0; font-family: var(--font-fa);
+            background-color: var(--bg-deep); color: var(--text-main);
+            min-height: 100vh; display: flex; justify-content: center;
+            overflow-x: hidden; transition: background 0.5s ease;
         }
-        /* 
-         * ============================================================
-         *  ANIMATED BACKGROUND (THE SOUL)
-         * ============================================================
-         */
-        .ambient-light {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none;
-        }
-        .orb {
-            position: absolute; border-radius: 50%;
-            filter: blur(80px); opacity: 0.6;
-            animation: floatOrb 10s infinite alternate ease-in-out;
-        }
+        /* ANIMATION */
+        .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: floatOrb 10s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; animation-duration: 12s; }
         .orb-2 { width: 250px; height: 250px; background: var(--accent); bottom: -50px; right: -50px; animation-duration: 15s; animation-delay: -2s; }
         .orb-3 { width: 200px; height: 200px; background: var(--cyan); top: 40%; left: 40%; animation-duration: 18s; opacity: 0.4; }
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
-        }
-        /* 
-         * ============================================================
-         *  LAYOUT CONTAINER
-         * ============================================================
-         */
-        .main-container {
-            width: 100%; max-width: 500px;
-            padding: 25px; padding-bottom: 120px;
-            position: relative; z-index: 10;
-        }
-        /* 
-         * ============================================================
-         *  HEADER & NAV
-         * ============================================================
-         */
-        .navbar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px;
-        }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
+        /* LAYOUT */
+        .main-container { width: 100%; max-width: 500px; padding: 25px; padding-bottom: 120px; position: relative; z-index: 10; }
+        /* NAVBAR */
+        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .logo-area { display: flex; align-items: center; gap: 8px; }
-        .logo-icon { 
-            font-size: 1.5rem; color: var(--primary); 
-            animation: spinSlow 10s linear infinite;
-        }
+        .logo-icon { font-size: 1.5rem; color: var(--primary); animation: spinSlow 10s linear infinite; }
         @keyframes spinSlow { 100% { transform: rotate(360deg); } }
         .logo-text { font-family: var(--font-en); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; }
         .nav-actions { display: flex; gap: 10px; }
@@ -126,151 +83,77 @@
             width: 44px; height: 44px; border-radius: 14px;
             background: var(--glass-base); border: 1px solid var(--glass-border);
             color: var(--text-main); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            font-size: 1.2rem;
-            position: relative;
+            cursor: pointer; transition: all 0.3s; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            font-size: 1.2rem; position: relative;
         }
-        .icon-btn:hover { 
-            background: var(--bg-surface); 
-            border-color: var(--primary); color: var(--primary);
-            transform: translateY(-3px) rotate(5deg);
-            box-shadow: var(--neon-shadow);
-        }
-        .lang-badge {
-            position: absolute; bottom: -5px; right: -5px;
-            font-size: 0.6rem; background: var(--primary); color: #fff;
-            padding: 2px 4px; border-radius: 4px; font-weight: bold;
-        }
-        /* 
-         * ============================================================
-         *  PROFILE HERO CARD (GLASSMOPHISM)
-         * ============================================================
-         */
+        .icon-btn:hover { background: var(--bg-surface); border-color: var(--primary); color: var(--primary); transform: translateY(-3px) rotate(5deg); box-shadow: var(--neon-shadow); }
+        .lang-badge { position: absolute; bottom: -5px; right: -5px; font-size: 0.6rem; background: var(--primary); color: #fff; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
+        /* HERO CARD */
         .hero-card {
             background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid rgba(255,255,255,0.15);
-            border-radius: var(--card-radius);
-            padding: 30px 20px;
-            text-align: center;
-            position: relative; overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            margin-bottom: 25px;
+            border: 1px solid var(--glass-border); border-top: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--card-radius); padding: 30px 20px; text-align: center;
+            position: relative; overflow: hidden; box-shadow: var(--shadow-xl); margin-bottom: 25px;
             animation: slideUp 0.6s ease-out;
         }
-        /* Shimmer Effect */
         .hero-card::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-25deg);
-            animation: shimmer 6s infinite; pointer-events: none;
+            transform: skewX(-25deg); animation: shimmer 6s infinite; pointer-events: none;
         }
         @keyframes shimmer { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
         .avatar-wrapper {
-            width: 90px; height: 90px; margin: 0 auto 15px;
-            border-radius: 50%; padding: 4px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            position: relative;
+            width: 90px; height: 90px; margin: 0 auto 15px; border-radius: 50%; padding: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--accent)); position: relative;
         }
-        .avatar-inner {
-            width: 100%; height: 100%; background: var(--bg-deep); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
+        .avatar-inner { width: 100%; height: 100%; background: var(--bg-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .avatar-inner i { font-size: 3rem; color: var(--text-main); }
-        .username { 
-            font-size: 1.5rem; font-weight: 800; margin: 0; 
-            background: linear-gradient(to right, #fff, #b8b8b8);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .username { font-size: 1.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #fff, #b8b8b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.light-theme .username { background: linear-gradient(to right, #333, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .status-pill {
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-top: 10px; padding: 6px 16px;
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 16px;
             border-radius: 50px; font-size: 0.8rem; font-weight: 600;
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
         body.light-theme .status-pill { background: #fff; border-color: #eee; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; box-shadow: 0 0 8px currentColor; }
         .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); }
         .st-limited { color: var(--warning); } .st-limited .status-dot { background: var(--warning); }
         .st-expired { color: var(--danger); } .st-expired .status-dot { background: var(--danger); }
-        /* 
-         * ============================================================
-         *  DASHBOARD STATS (CIRCULAR)
-         * ============================================================
-         */
-        .stats-container {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-            margin-bottom: 25px;
-        }
+        /* STATS */
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .stat-card {
-            background: var(--glass-base);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            position: relative;
-            transition: 0.3s;
+            background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: var(--card-radius);
+            padding: 20px; display: flex; flex-direction: column; align-items: center; position: relative; transition: 0.3s;
         }
         .stat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .progress-circle { width: 100px; height: 100px; transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 8; }
         body.light-theme .circle-bg { stroke: rgba(0,0,0,0.05); }
         .circle-bar {
-            fill: none; stroke-width: 8; stroke-linecap: round;
-            stroke-dasharray: 283; /* 2*pi*45 */
-            stroke-dashoffset: 283;
+            fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283;
             transition: stroke-dashoffset 2s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .traffic-stroke { stroke: url(#gradientTraffic); }
         .time-stroke { stroke: url(#gradientTime); }
-        .stat-content {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding-top: 18px; /* Offset for circle pos */
-        }
+        .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 18px; }
         .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
         .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        /* 
-         * ============================================================
-         *  ACTION BUTTONS (GLOWING)
-         * ============================================================
-         */
+        /* ACTIONS */
         .main-actions { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 30px; }
         .btn-glow {
-            border: none; padding: 16px; border-radius: var(--btn-radius);
-            font-family: inherit; font-size: 0.95rem; font-weight: 700;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.3s; position: relative; overflow: hidden;
+            border: none; padding: 16px; border-radius: var(--btn-radius); font-family: inherit; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; position: relative; overflow: hidden;
         }
-        .btn-primary {
-            background: var(--primary); color: #fff;
-            box-shadow: 0 8px 25px -5px var(--primary-glow);
-        }
-        .btn-primary:hover { 
-            transform: translateY(-2px); box-shadow: 0 15px 30px -5px var(--primary-glow);
-            filter: brightness(1.1);
-        }
-        .btn-glass {
-            background: rgba(255,255,255,0.05); color: var(--text-main);
-            border: 1px solid var(--glass-border);
-        }
+        .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 8px 25px -5px var(--primary-glow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px var(--primary-glow); filter: brightness(1.1); }
+        .btn-glass { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--glass-border); }
         .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--text-main); }
-        /* 
-         * ============================================================
-         *  CONNECTIONS & APPS (ACCORDION & CARDS)
-         * ============================================================
-         */
+        /* SECTIONS */
         .section-box { margin-bottom: 25px; }
-        .section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding: 0 5px; cursor: pointer;
-        }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; cursor: pointer; }
         .section-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .section-title i { color: var(--accent); }
         .toggle-arrow { transition: 0.3s; }
@@ -278,96 +161,75 @@
         .section-content { display: none; animation: fadeIn 0.4s ease; }
         .section-content.open { display: block; }
         .btn-copy-all {
-            width: 100%; padding: 12px; margin-bottom: 15px;
-            background: rgba(16, 185, 129, 0.1); color: var(--success);
-            border: 1px dashed var(--success); border-radius: 12px;
-            cursor: pointer; font-weight: 600; font-size: 0.9rem;
+            width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(16, 185, 129, 0.1); color: var(--success);
+            border: 1px dashed var(--success); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
             transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-copy-all:hover { background: var(--success); color: #fff; }
         .config-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border);
-            padding: 16px; border-radius: 18px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 12px;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
+            background: var(--glass-base); border: 1px solid var(--glass-border); padding: 16px; border-radius: 18px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; position: relative; overflow: hidden;
         }
         .config-card::after {
             content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transform: scaleX(0); transform-origin: left; transition: 0.3s;
+            background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transform-origin: left; transition: 0.3s;
         }
         .config-card:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.2); }
         .config-card:hover::after { transform: scaleX(1); }
         .prot-icon {
-            width: 42px; height: 42px; border-radius: 12px;
-            background: rgba(255,255,255,0.05); color: var(--text-main);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.75rem; border: 1px solid var(--glass-border);
+            width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-main);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; border: 1px solid var(--glass-border);
         }
         .conf-info { flex: 1; overflow: hidden; }
         .conf-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .conf-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
         .action-icon {
-            width: 38px; height: 38px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.2s; background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem;
         }
         .action-icon:hover { background: var(--bg-surface); color: var(--text-main); transform: scale(1.1); }
-        /* App Grid */
+        /* APP GRID */
         .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .app-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border);
-            padding: 15px; border-radius: 16px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            text-decoration: none; color: var(--text-main); transition: 0.3s;
+            background: var(--glass-base); border: 1px solid var(--glass-border); padding: 15px; border-radius: 16px;
+            display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; color: var(--text-main); transition: 0.3s;
         }
         .app-card:hover { background: var(--bg-surface); border-color: var(--cyan); transform: translateY(-3px); }
         .app-card i { font-size: 1.8rem; margin-bottom: 8px; color: var(--text-muted); transition: 0.3s; }
         .app-card:hover i { color: var(--cyan); }
         .app-name { font-size: 0.9rem; font-weight: 700; }
         .app-os { font-size: 0.75rem; color: var(--text-muted); }
-        /* 
-         * ============================================================
-         *  MODAL & TOAST (ALERTS)
-         * ============================================================
-         */
+        /* ALERTS */
         .toast-box {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(10px);
-            color: #fff; padding: 12px 30px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 600;
-            display: flex; align-items: center; gap: 8px;
+            background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(10px); color: #fff; padding: 12px 30px; border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 600; display: flex; align-items: center; gap: 8px;
             transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; opacity: 0;
         }
         .toast-box.active { transform: translateX(-50%) translateY(0); opacity: 1; }
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
-            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-body {
-            background: var(--bg-surface); padding: 30px; border-radius: 30px;
-            width: 90%; max-width: 340px; text-align: center;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            background: var(--bg-surface); padding: 30px; border-radius: 30px; width: 90%; max-width: 340px; text-align: center;
+            border: 1px solid var(--glass-border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
             transform: scale(0.8) translateY(20px); transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .modal-overlay.active .modal-body { transform: scale(1) translateY(0); }
         #qr-display { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: fit-content; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        /* Utilities */
-        .hidden-elm { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         /* Language Specifics */
+        .hidden-elm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
         body.lang-en { direction: ltr; font-family: var(--font-en); }
         body.lang-ru { direction: ltr; font-family: var(--font-ru); }
         body.lang-en .config-card:hover, body.lang-ru .config-card:hover { transform: translateX(5px); }
     </style>
 </head>
 <body>
-    <!-- SAFE DATA STORE: Prevents Jinja2 500 Errors by using defaults -->
+    <!-- SAFE DATA STORE -->
     <div id="data-core" 
          data-user="{{ user.username | default('User') }}"
          data-status="{{ user.status | default('active') }}"
@@ -415,7 +277,7 @@
         </div>
         <!-- STATS DASHBOARD -->
         <div class="stats-container">
-            <!-- Time (Moved to Right via RTL First-Child Logic) -->
+            <!-- Time -->
             <div class="stat-card">
                 <div style="position:relative; width:100px; height:100px;">
                     <svg class="progress-circle">
@@ -477,7 +339,6 @@
                     <i class="ri-file-list-3-line"></i> <span data-translate="copy_all">کپی همه کانفیگ‌ها</span>
                 </button>
                 <div id="config-list">
-                    <!-- Configs injected here -->
                     <div style="text-align:center; padding:20px; color:var(--text-muted)">
                         <i class="ri-loader-4-line" style="animation:spinSlow 1s linear infinite; font-size:1.5rem"></i>
                     </div>
@@ -493,33 +354,24 @@
             <div id="apps-area" class="section-content">
                 <div class="app-grid">
                     <a href="https://github.com/2dust/v2rayNG/releases/latest" target="_blank" class="app-card">
-                        <i class="ri-android-fill"></i>
-                        <span class="app-name">v2rayNG</span>
-                        <span class="app-os">Android</span>
+                        <i class="ri-android-fill"></i> <span class="app-name">v2rayNG</span> <span class="app-os">Android</span>
                     </a>
                     <a href="https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690" target="_blank" class="app-card">
-                        <i class="ri-apple-fill"></i>
-                        <span class="app-name">V2Box</span>
-                        <span class="app-os">iOS</span>
+                        <i class="ri-apple-fill"></i> <span class="app-name">V2Box</span> <span class="app-os">iOS</span>
                     </a>
                     <a href="https://github.com/2dust/v2rayN/releases" target="_blank" class="app-card">
-                        <i class="ri-windows-fill"></i>
-                        <span class="app-name">v2rayN</span>
-                        <span class="app-os">Windows</span>
+                        <i class="ri-windows-fill"></i> <span class="app-name">v2rayN</span> <span class="app-os">Windows</span>
                     </a>
                     <a href="https://github.com/MatsuriDayo/nekoray/releases" target="_blank" class="app-card">
-                        <i class="ri-ubuntu-fill"></i>
-                        <span class="app-name">Nekoray</span>
-                        <span class="app-os">Linux</span>
+                        <i class="ri-ubuntu-fill"></i> <span class="app-name">Nekoray</span> <span class="app-os">Linux</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- NOTIFICATIONS -->
+    <!-- TOAST -->
     <div class="toast-box" id="toast">
-        <i class="ri-checkbox-circle-fill"></i>
-        <span id="toast-msg">Copied successfully!</span>
+        <i class="ri-checkbox-circle-fill"></i> <span id="toast-msg">Copied successfully!</span>
     </div>
     <!-- MODAL -->
     <div class="modal-overlay" id="modal" onclick="closeModal()">
@@ -530,29 +382,34 @@
             <button class="btn-glow btn-glass" style="width:100%" onclick="closeModal()">Close</button>
         </div>
     </div>
+    
     <script>
-        // --- TRANSLATIONS (Expanded to 4 Languages) ---
+        // --- TRANSLATIONS (Now includes "unlimited") ---
         const i18n = {
             fa: {
                 active: "فعال", limited: "محدود شده", expired: "منقضی", disabled: "غیرفعال", pending: "در انتظار",
+                unlimited: "حجم نامحدود", // <--- Added
                 days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
                 connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
                 copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl"
             },
             en: {
                 active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled", pending: "Pending",
+                unlimited: "Unlimited Data", // <--- Added
                 days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
                 connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
                 copied: "Copied!", scan: "Scan QR", dir: "ltr"
             },
             ru: {
                 active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено", pending: "В ожидании",
+                unlimited: "Безлимит", // <--- Added
                 days: "дней", remaining: "Осталось", copy_link: "Ссылка подписки",
                 connections: "Конфигурации", copy_all: "Копировать все", downloads: "Приложения",
                 copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr"
             },
             ar: {
                 active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل", pending: "قيد الانتظار",
+                unlimited: "بيانات غير محدودة", // <--- Added
                 days: "أيام", remaining: "متبقي", copy_link: "نسخ الرابط",
                 connections: "الاتصالات", copy_all: "نسخ الكل", downloads: "تنزيل",
                 copied: "تم النسخ!", scan: "مسح QR", dir: "rtl"
@@ -560,89 +417,99 @@
         };
         const supportedLangs = ['fa', 'en', 'ru', 'ar'];
         
-        // --- APP LOGIC ---
+        // --- LOGIC ---
         const core = document.getElementById('data-core').dataset;
         let currentLang = localStorage.getItem('lang') || 'fa';
         let currentTheme = localStorage.getItem('theme') || 'dark';
         
-        // 1. INIT
         function init() {
             setTheme(currentTheme);
             setLang(currentLang);
-            // Username
             document.getElementById('ui-username').textContent = core.user;
             
-            // --- STATUS LOGIC (Strictly from Jinja) ---
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
-            stPill.className = 'status-pill'; // Reset classes
+            stPill.className = 'status-pill'; 
+
+            // --- SMART STATUS CLEANER ---
+            // 1. Get raw string
+            let raw = (core.status || 'active').toLowerCase().trim();
+            let visualStatus = 'active'; // default
+
+            // 2. Check for keywords inside the string (strips prefixes like 'userstatus.')
+            if (raw === 'false' || raw === 'off' || raw.includes('disabled') || raw.includes('deactive')) {
+                visualStatus = 'disabled';
+            } else if (raw.includes('limited')) {
+                visualStatus = 'limited';
+            } else if (raw.includes('pending')) {
+                visualStatus = 'pending';
+            } else if (raw.includes('expired')) {
+                visualStatus = 'expired';
+            } else if (raw === 'true' || raw === 'on' || raw.includes('active')) {
+                visualStatus = 'active';
+            } else {
+                // Unknown fallback
+                visualStatus = raw; 
+            }
             
-            // Get raw status from Jinja, normalize it
-            let visualStatus = (core.status || 'active').toLowerCase().trim();
-            
-            // Handle variations
-            if (visualStatus === 'true' || visualStatus === 'on' || visualStatus === 'enable') visualStatus = 'active';
-            if (visualStatus === 'false' || visualStatus === 'off') visualStatus = 'disabled';
-            
-            // Calculate time manually ONLY for the countdown display
+            // 3. Time calculation (Visual only)
             let daysLeft = 0;
             const expire = parseFloat(core.expire) || 0;
             if (expire) {
                 const now = Math.floor(Date.now() / 1000);
                 const diff = expire - now;
-                if (diff > 0) {
-                     daysLeft = Math.ceil(diff / 86400);
-                } else {
-                    daysLeft = 0;
-                }
+                if (diff > 0) daysLeft = Math.ceil(diff / 86400);
             } else {
                 daysLeft = Infinity;
             }
             
-            // Apply Status Class & Text based ONLY on visualStatus (Jinja)
+            // 4. Apply UI
             if (visualStatus === 'active') {
-                stPill.classList.add('st-active'); // Green
+                stPill.classList.add('st-active');
                 stText.textContent = i18n[currentLang].active;
             } else if (visualStatus === 'limited') {
-                stPill.classList.add('st-limited'); // Orange
+                stPill.classList.add('st-limited');
                 stText.textContent = i18n[currentLang].limited;
             } else if (visualStatus === 'expired') {
-                stPill.classList.add('st-expired'); // Red
+                stPill.classList.add('st-expired');
                 stText.textContent = i18n[currentLang].expired;
             } else if (visualStatus === 'disabled') {
-                stPill.classList.add('st-expired'); // Red
-                stText.textContent = i18n[currentLang].disabled;
+                stPill.classList.add('st-expired');
+                stText.textContent = i18n[currentLang].disabled; 
             } else if (visualStatus === 'pending') {
-                stPill.classList.add('st-limited'); // Orange/Yellow
+                stPill.classList.add('st-limited');
                 stText.textContent = i18n[currentLang].pending;
             } else {
-                // Fallback for unknown statuses
                 stPill.classList.add('st-expired');
                 stText.textContent = visualStatus;
             }
             
-            // Stats
             renderStats(daysLeft, expire);
-            // Configs
             fetchConfigs();
         }
         
-        // 2. STATS RENDERER
         function formatBytes(bytes) {
             if (!+bytes) return '0 MB';
             const k = 1024; const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
+        
         function renderStats(daysLeft, expireTimestamp) {
             const used = parseFloat(core.used) || 0;
             const limit = parseFloat(core.limit) || 0;
-            // Traffic
+            
             document.getElementById('ui-used').textContent = formatBytes(used);
-            document.getElementById('ui-total').textContent = limit ? `Total: ${formatBytes(limit)}` : 'Unlimited Data';
+            
+            // --- FIX FOR UNLIMITED TEXT ---
+            document.getElementById('ui-total').textContent = limit ? 
+                `Total: ${formatBytes(limit)}` : 
+                i18n[currentLang].unlimited;
+            // -----------------------------
+
             const trPercent = limit ? Math.min((used/limit)*100, 100) : 0;
             animateCircle('traffic-bar', trPercent);
-            // Time
+            
             if(expireTimestamp) {
                 document.getElementById('ui-days').textContent = daysLeft;
                 const timeP = daysLeft > 0 ? 75 : 0; 
@@ -652,6 +519,7 @@
                 animateCircle('time-bar', 100);
             }
         }
+        
         function animateCircle(id, percent) {
             setTimeout(() => {
                 const circle = document.getElementById(id);
@@ -662,10 +530,8 @@
             }, 300);
         }
         
-        // 3. CONFIG PARSING
         function fetchConfigs() {
-            let url = core.sub;
-            if(!url) url = window.location.href;
+            let url = core.sub; if(!url) url = window.location.href;
             fetch(url).then(r => r.text()).then(txt => {
                 let decoded = txt;
                 try {
@@ -678,23 +544,17 @@
                 document.getElementById('config-list').innerHTML = `<div style="text-align:center; color:var(--danger)">Error loading configs</div>`;
             });
         }
+        
         function renderConfigList(lines) {
-            const container = document.getElementById('config-list');
-            container.innerHTML = '';
+            const container = document.getElementById('config-list'); container.innerHTML = '';
             lines.forEach((line, i) => {
                 let proto = line.split('://')[0].toUpperCase();
                 let name = `Config ${i+1}`;
-                if(line.includes('#')) {
-                    try { name = decodeURIComponent(line.split('#').pop()); } catch(e){}
-                }
-                const card = document.createElement('div');
-                card.className = 'config-card';
+                if(line.includes('#')) { try { name = decodeURIComponent(line.split('#').pop()); } catch(e){} }
+                const card = document.createElement('div'); card.className = 'config-card';
                 card.innerHTML = `
                     <div class="prot-icon">${proto.substring(0,3)}</div>
-                    <div class="conf-info">
-                        <div class="conf-name">${name}</div>
-                        <div class="conf-meta">${proto}</div>
-                    </div>
+                    <div class="conf-info"><div class="conf-name">${name}</div><div class="conf-meta">${proto}</div></div>
                     <button class="action-icon" onclick="copyTxt('${line}')"><i class="ri-file-copy-line"></i></button>
                     <button class="action-icon" onclick="showQR('${line}')"><i class="ri-qr-code-line"></i></button>
                     <textarea class="hidden-elm copy-target">${line}</textarea>
@@ -703,78 +563,50 @@
             });
         }
         
-        // 4. UTILS
-        function copyLink() {
-            let url = core.sub || window.location.href;
-            copyTxt(url);
-        }
+        function copyLink() { copyTxt(core.sub || window.location.href); }
         function copyAll() {
-            const targets = document.querySelectorAll('.copy-target');
-            let all = "";
-            targets.forEach(t => all += t.value + "\n");
-            if(all) copyTxt(all);
+            const targets = document.querySelectorAll('.copy-target'); let all = "";
+            targets.forEach(t => all += t.value + "\n"); if(all) copyTxt(all);
         }
         function copyTxt(txt) {
-            if(navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(txt).then(showToast).catch(() => fallbackCopy(txt));
-            } else {
-                fallbackCopy(txt);
-            }
+            if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(showToast).catch(() => fallbackCopy(txt));
+            else fallbackCopy(txt);
         }
         function fallbackCopy(txt) {
-            const ta = document.createElement('textarea');
-            ta.value = txt; document.body.appendChild(ta);
-            ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-            showToast();
+            const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta);
+            ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast();
         }
         function showToast() {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = i18n[currentLang].copied;
-            t.classList.add('active');
-            setTimeout(() => t.classList.remove('active'), 2000);
+            const t = document.getElementById('toast'); document.getElementById('toast-msg').textContent = i18n[currentLang].copied;
+            t.classList.add('active'); setTimeout(() => t.classList.remove('active'), 2000);
         }
         function showMainQR() { showQR(core.sub || window.location.href); }
         function showQR(txt) {
-            const el = document.getElementById('qr-display');
-            el.innerHTML = '';
+            const el = document.getElementById('qr-display'); el.innerHTML = '';
             new QRCode(el, { text: txt, width: 200, height: 200, colorDark: "#000", colorLight: "#fff" });
             document.getElementById('modal').classList.add('active');
         }
         function closeModal() { document.getElementById('modal').classList.remove('active'); }
         function toggleSection(id, header) {
-            const el = document.getElementById(id);
-            el.classList.toggle('open');
-            header.classList.toggle('active-section');
+            const el = document.getElementById(id); el.classList.toggle('open'); header.classList.toggle('active-section');
         }
         function toggleTheme() {
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('theme', currentTheme);
-            setTheme(currentTheme);
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; localStorage.setItem('theme', currentTheme); setTheme(currentTheme);
         }
         function setTheme(t) {
-            if(t === 'light') {
-                document.body.classList.add('light-theme');
-                document.getElementById('theme-icon').className = 'ri-sun-line';
-            } else {
-                document.body.classList.remove('light-theme');
-                document.getElementById('theme-icon').className = 'ri-moon-clear-line';
-            }
+            if(t === 'light') { document.body.classList.add('light-theme'); document.getElementById('theme-icon').className = 'ri-sun-line'; }
+            else { document.body.classList.remove('light-theme'); document.getElementById('theme-icon').className = 'ri-moon-clear-line'; }
         }
         function cycleLang() {
-            const idx = supportedLangs.indexOf(currentLang);
-            const nextIdx = (idx + 1) % supportedLangs.length;
-            currentLang = supportedLangs[nextIdx];
-            localStorage.setItem('lang', currentLang);
-            setLang(currentLang);
-            init(); // Re-render logic/text
+            const idx = supportedLangs.indexOf(currentLang); const nextIdx = (idx + 1) % supportedLangs.length;
+            currentLang = supportedLangs[nextIdx]; localStorage.setItem('lang', currentLang); setLang(currentLang); init();
         }
         function setLang(l) {
             document.documentElement.dir = i18n[l].dir;
             document.body.className = document.body.className.replace(/lang-\w+/, '') + ` lang-${l}`;
             document.getElementById('current-lang-badge').textContent = l.toUpperCase();
             document.querySelectorAll('[data-translate]').forEach(el => {
-                const k = el.getAttribute('data-translate');
-                if(i18n[l][k]) el.textContent = i18n[l][k];
+                const k = el.getAttribute('data-translate'); if(i18n[l][k]) el.textContent = i18n[l][k];
             });
         }
         window.onload = init;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UserPanel</title>
+    <title>NextGen User Panel</title>
     <meta name="theme-color" content="#09090b">
     
     <!-- Fonts -->
@@ -225,8 +225,9 @@
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; box-shadow: 0 0 8px currentColor; }
         
         .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); }
-        .st-limited { color: var(--warning); } .st-limited .status-dot { background: var(--warning); }
+        .st-onhold { color: var(--cyan); } .st-onhold .status-dot { background: var(--cyan); }
         .st-expired { color: var(--danger); } .st-expired .status-dot { background: var(--danger); }
+        .st-disabled { color: var(--text-muted); border-color: var(--text-muted); } .st-disabled .status-dot { background: var(--text-muted); }
 
         /* 
          * ============================================================
@@ -441,7 +442,7 @@
         <nav class="navbar">
             <div class="logo-area">
                 <i class="ri-radar-fill logo-icon"></i>
-                <span class="logo-text">Ni<span style="color:var(--accent)">Ros</span></span>
+                <span class="logo-text">NET<span style="color:var(--accent)">PANEL</span></span>
             </div>
             <div class="nav-actions">
                 <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">
@@ -551,7 +552,7 @@
             </div>
             <div id="apps-area" class="section-content">
                 <div class="app-grid">
-                    <a href="https://github.com/2dust/v2rayNG/releases/latest" target="_blank" class="app-card">
+                    <a href="https://play.google.com/store/apps/details?id=com.v2ray.ang" target="_blank" class="app-card">
                         <i class="ri-android-fill"></i>
                         <span class="app-name">v2rayNG</span>
                         <span class="app-os">Android</span>
@@ -597,25 +598,25 @@
         // --- TRANSLATIONS (Expanded to 4 Languages) ---
         const i18n = {
             fa: {
-                active: "فعال", limited: "محدود", expired: "منقضی", disabled: "غیرفعال",
+                active: "فعال", limited: "محدود", expired: "منقضی", disabled: "غیرفعال", on_hold: "در انتظار شروع",
                 days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
                 connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
                 copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl"
             },
             en: {
-                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled",
+                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled", on_hold: "On Hold",
                 days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
                 connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
                 copied: "Copied!", scan: "Scan QR", dir: "ltr"
             },
             ru: {
-                active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено",
+                active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено", on_hold: "Ожидание",
                 days: "дней", remaining: "Осталось", copy_link: "Ссылка подписки",
                 connections: "Конфигурации", copy_all: "Копировать все", downloads: "Приложения",
                 copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr"
             },
             ar: {
-                active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل",
+                active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل", on_hold: "في الانتظار",
                 days: "أيام", remaining: "متبقي", copy_link: "نسخ الرابط",
                 connections: "الاتصالات", copy_all: "نسخ الكل", downloads: "تنزيل",
                 copied: "تم النسخ!", scan: "مسح QR", dir: "rtl"
@@ -637,49 +638,56 @@
             // Username
             document.getElementById('ui-username').textContent = core.user;
 
-            // Status Logic (Strict Backend Priority)
+            // --- STATUS LOGIC (Priority: Backend > Expiration > Exhaustion > Active) ---
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
-            stPill.className = 'status-pill'; // reset class
+            stPill.className = 'status-pill'; // clear classes
             
-            // Start with backend status as source of truth
-            let visualStatus = core.status;
-            
-            // Calculate time manually for the countdown and expiration check
-            let daysLeft = 0;
-            const expire = parseFloat(core.expire) || 0;
-            
-            if (expire) {
-                const now = Math.floor(Date.now() / 1000);
-                const diff = expire - now;
-                if (diff > 0) {
-                     daysLeft = Math.ceil(diff / 86400);
-                     // Note: We do NOT force 'active' here. We respect if backend says 'disabled' or 'limited'.
-                } else {
-                    // Only override status if time is actually up, but don't override 'disabled' if you want to be strict.
-                    // Usually, if expired, it should show expired.
-                    visualStatus = 'expired';
-                }
+            // Get raw status from backend
+            let backendStatus = core.status;
+            let displayStatus = 'active'; // default
+
+            // 1. Strict Backend Checks (Disabled / On Hold take precedence)
+            if (backendStatus === 'disabled') {
+                displayStatus = 'disabled';
+            } else if (backendStatus === 'on_hold') {
+                displayStatus = 'on_hold';
             } else {
-                daysLeft = Infinity;
+                // 2. Check Time Expiration
+                const now = Math.floor(Date.now() / 1000);
+                const expire = parseFloat(core.expire) || 0;
+                const isTimeExpired = (expire !== 0 && expire < now);
+
+                // 3. Check Data Exhaustion
+                const used = parseFloat(core.used) || 0;
+                const limit = parseFloat(core.limit) || 0;
+                const isDataExhausted = (limit !== 0 && used >= limit);
+
+                if (isTimeExpired || isDataExhausted || backendStatus === 'expired' || backendStatus === 'limited') {
+                    displayStatus = 'expired';
+                } else {
+                    displayStatus = 'active';
+                }
             }
 
-            // Apply Status Class & Text
-            if(visualStatus === 'active') {
+            // Apply to UI
+            if (displayStatus === 'active') {
                 stPill.classList.add('st-active');
                 stText.textContent = i18n[currentLang].active;
-            } else if(visualStatus === 'limited') {
-                stPill.classList.add('st-limited');
-                stText.textContent = i18n[currentLang].limited;
+            } else if (displayStatus === 'on_hold') {
+                stPill.classList.add('st-onhold');
+                stText.textContent = i18n[currentLang].on_hold;
+            } else if (displayStatus === 'disabled') {
+                stPill.classList.add('st-disabled');
+                stText.textContent = i18n[currentLang].disabled;
             } else {
-                // Covers expired and disabled (Red color)
+                // Expired / Limited
                 stPill.classList.add('st-expired');
-                // Use specific text if available
-                stText.textContent = (visualStatus === 'disabled') ? i18n[currentLang].disabled : i18n[currentLang].expired;
+                stText.textContent = i18n[currentLang].expired;
             }
 
             // Stats
-            renderStats(daysLeft, expire);
+            renderStats(core.expire);
 
             // Configs
             fetchConfigs();
@@ -693,9 +701,10 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function renderStats(daysLeft, expireTimestamp) {
+        function renderStats(expireTimestamp) {
             const used = parseFloat(core.used) || 0;
             const limit = parseFloat(core.limit) || 0;
+            const expire = parseFloat(expireTimestamp) || 0;
 
             // Traffic
             document.getElementById('ui-used').textContent = formatBytes(used);
@@ -705,10 +714,14 @@
             animateCircle('traffic-bar', trPercent);
 
             // Time
-            if(expireTimestamp) {
-                document.getElementById('ui-days').textContent = daysLeft;
+            if(expire) {
+                const now = Math.floor(Date.now() / 1000);
+                const diff = expire - now;
+                const days = Math.max(0, Math.ceil(diff / 86400));
+                document.getElementById('ui-days').textContent = days;
+                
                 // Visual logic: < 5 days = red, else green. Circle always 75% filled for aesthetics if active
-                const timeP = daysLeft > 0 ? 75 : 0; 
+                const timeP = days > 0 ? 75 : 0; 
                 animateCircle('time-bar', timeP);
             } else {
                 document.getElementById('ui-days').textContent = '∞';

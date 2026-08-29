@@ -8,21 +8,51 @@
     <!-- Fonts -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Icons (primary CDN) -->
+    <link id="remixicon-css" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <!-- QR Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Fallback loader: if the primary Remixicon CDN (jsdelivr) fails
+        // to load or its font-face doesn't actually apply (blocked CDN,
+        // stale/broken cache, filtering, etc.), swap to a secondary CDN
+        // (cdnjs) automatically. Pure reliability fix — no UI/markup change.
+        (function () {
+            var primary = document.getElementById('remixicon-css');
+            var fallbackHref = 'https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css';
+            var swapped = false;
+
+            function swapToFallback() {
+                if (swapped) return;
+                swapped = true;
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = fallbackHref;
+                document.head.appendChild(link);
+            }
+
+            primary.addEventListener('error', swapToFallback);
+
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    var test = document.createElement('i');
+                    test.className = 'ri-home-line';
+                    test.style.position = 'absolute';
+                    test.style.visibility = 'hidden';
+                    test.style.fontSize = '32px';
+                    document.body.appendChild(test);
+                    var width = test.offsetWidth;
+                    document.body.removeChild(test);
+                    if (width === 0) swapToFallback();
+                }, 300);
+            });
+        })();
+    </script>
     <style>
-        /* 
-         * ============================================================
-         *  CORE VARIABLES & THEME CONFIGURATION
-         * ============================================================
-         */
         :root {
             --font-fa: 'Vazirmatn', sans-serif;
             --font-en: 'Outfit', sans-serif;
             --font-ru: 'Rubik', sans-serif;
-            /* Dark Mode */
             --bg-deep: #000000;
             --bg-surface: #09090b;
             --glass-base: rgba(20, 20, 25, 0.65);
@@ -40,8 +70,8 @@
             --btn-radius: 16px;
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.6);
             --neon-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --proto-vless: #a78bfa; --proto-vmess: #60a5fa; --proto-trojan: #f472b6; --proto-ss: #34d399; --proto-ovp: #fbbf24; --proto-default: #9ca3af;
         }
-        /* Light Mode */
         body.light-theme {
             --bg-deep: #f0f2f5;
             --bg-surface: #ffffff;
@@ -55,7 +85,6 @@
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.1);
             --neon-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
         }
-        /* BASE */
         *, *::before, *::after { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body {
             margin: 0; padding: 0; font-family: var(--font-fa);
@@ -63,16 +92,17 @@
             min-height: 100vh; display: flex; justify-content: center;
             overflow-x: hidden; transition: background 0.5s ease;
         }
-        /* ANIMATION */
         .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .ambient-light::after {
+            content: ''; position: absolute; inset: 0; opacity: 0.035; pointer-events: none; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: floatOrb 10s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; animation-duration: 12s; }
         .orb-2 { width: 250px; height: 250px; background: var(--accent); bottom: -50px; right: -50px; animation-duration: 15s; animation-delay: -2s; }
         .orb-3 { width: 200px; height: 200px; background: var(--cyan); top: 40%; left: 40%; animation-duration: 18s; opacity: 0.4; }
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
-        /* LAYOUT */
         .main-container { width: 100%; max-width: 500px; padding: 25px; padding-bottom: 120px; position: relative; z-index: 10; }
-        /* NAVBAR */
         .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .logo-area { display: flex; align-items: center; gap: 8px; }
         .logo-icon { font-size: 1.5rem; color: var(--primary); animation: spinSlow 10s linear infinite; }
@@ -88,7 +118,6 @@
         }
         .icon-btn:hover { background: var(--bg-surface); border-color: var(--primary); color: var(--primary); transform: translateY(-3px) rotate(5deg); box-shadow: var(--neon-shadow); }
         .lang-badge { position: absolute; bottom: -5px; right: -5px; font-size: 0.6rem; background: var(--primary); color: #fff; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
-        /* HERO CARD */
         .hero-card {
             background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -107,6 +136,12 @@
             width: 90px; height: 90px; margin: 0 auto 15px; border-radius: 50%; padding: 4px;
             background: linear-gradient(135deg, var(--primary), var(--accent)); position: relative;
         }
+        .avatar-wrapper::before {
+            content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 1.5px solid var(--success);
+            opacity: 0; animation: none;
+        }
+        .avatar-wrapper.pulse-active::before { opacity: 0.6; animation: avatarPulse 2.4s ease-out infinite; }
+        @keyframes avatarPulse { 0% { transform: scale(0.9); opacity: 0.55; } 100% { transform: scale(1.35); opacity: 0; } }
         .avatar-inner { width: 100%; height: 100%; background: var(--bg-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .avatar-inner i { font-size: 3rem; color: var(--text-main); }
         .username { font-size: 1.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #fff, #b8b8b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -115,14 +150,14 @@
             display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 16px;
             border-radius: 50px; font-size: 0.8rem; font-weight: 600;
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            transition: background 0.4s ease;
         }
         body.light-theme .status-pill { background: #fff; border-color: #eee; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; box-shadow: 0 0 8px currentColor; }
-        .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); }
-        .st-limited { color: var(--warning); } .st-limited .status-dot { background: var(--warning); }
-        .st-expired { color: var(--danger); } .st-expired .status-dot { background: var(--danger); }
-        /* STATS */
-        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .st-active { color: var(--success); background: linear-gradient(90deg, rgba(16,185,129,0.16), rgba(6,182,212,0.1)) !important; } .st-active .status-dot { background: var(--success); }
+        .st-limited { color: var(--warning); background: linear-gradient(90deg, rgba(245,158,11,0.18), rgba(239,68,68,0.08)) !important; } .st-limited .status-dot { background: var(--warning); }
+        .st-expired { color: var(--danger); background: linear-gradient(90deg, rgba(239,68,68,0.18), rgba(139,92,246,0.06)) !important; } .st-expired .status-dot { background: var(--danger); }
+        .stats-container { display: grid; grid-template-columns: 1.3fr 1fr; gap: 15px; margin-bottom: 25px; align-items: stretch; }
         .stat-card {
             background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: var(--card-radius);
             padding: 20px; display: flex; flex-direction: column; align-items: center; position: relative; transition: 0.3s;
@@ -138,10 +173,10 @@
         .traffic-stroke { stroke: url(#gradientTraffic); }
         .time-stroke { stroke: url(#gradientTime); }
         .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 18px; }
-        .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; }
+        .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
+        .stat-card.stat-primary .stat-num { font-size: 1.3rem; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        /* ACTIONS */
+        .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); font-variant-numeric: tabular-nums; }
         .main-actions { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 30px; }
         .btn-glow {
             border: none; padding: 16px; border-radius: var(--btn-radius); font-family: inherit; font-size: 0.95rem; font-weight: 700;
@@ -151,7 +186,6 @@
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px var(--primary-glow); filter: brightness(1.1); }
         .btn-glass { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--glass-border); }
         .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--text-main); }
-        /* SECTIONS */
         .section-box { margin-bottom: 25px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; cursor: pointer; }
         .section-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -167,18 +201,13 @@
         }
         .btn-copy-all:hover { background: var(--success); color: #fff; }
         .config-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border); padding: 16px; border-radius: 18px; margin-bottom: 10px;
+            background: var(--glass-base); border: 1px solid var(--glass-border); border-left: 3px solid transparent; padding: 16px; border-radius: 18px; margin-bottom: 10px;
             display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; position: relative; overflow: hidden;
         }
-        .config-card::after {
-            content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transform-origin: left; transition: 0.3s;
-        }
-        .config-card:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.2); }
-        .config-card:hover::after { transform: scaleX(1); }
+        .config-card:hover { transform: translateX(5px); border-color: rgba(255,255,255,0.2); border-left-color: var(--proto-accent, var(--primary)); }
         .prot-icon {
-            width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text-main);
-            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; border: 1px solid var(--glass-border);
+            width: 42px; height: 42px; border-radius: 12px; background: color-mix(in srgb, var(--proto-accent, var(--text-main)) 16%, transparent); color: var(--proto-accent, var(--text-main));
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; border: 1px solid color-mix(in srgb, var(--proto-accent, var(--glass-border)) 40%, transparent);
         }
         .conf-info { flex: 1; overflow: hidden; }
         .conf-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -188,7 +217,9 @@
             cursor: pointer; transition: 0.2s; background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem;
         }
         .action-icon:hover { background: var(--bg-surface); color: var(--text-main); transform: scale(1.1); }
-        /* APP GRID */
+        .action-icon.copied { color: var(--success) !important; }
+        .action-icon .icon-swap { display: inline-flex; transition: transform 0.25s ease; }
+        .action-icon.copied .icon-swap { transform: scale(1.25); }
         .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .app-card {
             background: var(--glass-base); border: 1px solid var(--glass-border); padding: 15px; border-radius: 16px;
@@ -199,7 +230,6 @@
         .app-card:hover i { color: var(--cyan); }
         .app-name { font-size: 0.9rem; font-weight: 700; }
         .app-os { font-size: 0.75rem; color: var(--text-muted); }
-        /* ALERTS */
         .toast-box {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(10px); color: #fff; padding: 12px 30px; border-radius: 50px;
@@ -221,16 +251,76 @@
         #qr-display { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: fit-content; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        /* Language Specifics */
         .hidden-elm { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
         body.lang-en { direction: ltr; font-family: var(--font-en); }
         body.lang-ru { direction: ltr; font-family: var(--font-ru); }
         body.lang-en .config-card:hover, body.lang-ru .config-card:hover { transform: translateX(5px); }
+
+        /* --- Search & Filter --- */
+        .search-bar {
+            display: flex; align-items: center; gap: 10px; background: var(--glass-base);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px;
+            transition: 0.3s;
+        }
+        .search-bar:focus-within { border-color: var(--primary); box-shadow: var(--neon-shadow); }
+        .search-bar i { color: var(--text-muted); font-size: 1.1rem; }
+        .search-bar input {
+            flex: 1; background: transparent; border: none; color: var(--text-main);
+            font-family: inherit; font-size: 0.9rem;
+        }
+        .search-bar input::placeholder { color: var(--text-muted); }
+        .filter-chips { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .filter-chips::-webkit-scrollbar { display: none; }
+        .chip {
+            flex-shrink: 0; padding: 7px 16px; border-radius: 50px; font-size: 0.78rem; font-weight: 600;
+            background: var(--glass-base); border: 1px solid var(--glass-border); color: var(--text-muted);
+            cursor: pointer; transition: 0.25s; white-space: nowrap;
+        }
+        .chip:hover { border-color: var(--primary); color: var(--text-main); }
+        .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 15px -3px var(--primary-glow); }
+
+        /* --- Skeleton Loading --- */
+        .skeleton-card {
+            display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 18px; margin-bottom: 10px;
+            background: var(--glass-base); border: 1px solid var(--glass-border);
+        }
+        .skeleton-box {
+            border-radius: 10px; background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.1) 37%, rgba(255,255,255,0.04) 63%);
+            background-size: 400% 100%; animation: skeletonWave 1.4s ease infinite;
+        }
+        body.light-theme .skeleton-box { background: linear-gradient(90deg, rgba(0,0,0,0.04) 25%, rgba(0,0,0,0.09) 37%, rgba(0,0,0,0.04) 63%); background-size: 400% 100%; }
+        @keyframes skeletonWave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+        .sk-icon { width: 42px; height: 42px; }
+        .sk-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .sk-line1 { height: 12px; width: 60%; }
+        .sk-line2 { height: 9px; width: 35%; }
+
+        /* --- Stagger entrance for cards --- */
+        .config-card, .app-card { animation: cardIn 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Empty state --- */
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--text-muted);
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .empty-state i { font-size: 2.5rem; opacity: 0.5; }
+        .empty-state .empty-title { font-weight: 700; color: var(--text-main); font-size: 1rem; }
+        .empty-state .empty-sub { font-size: 0.8rem; }
+
+        /* --- sparkline under traffic stat --- */
+        .spark-wrap { width: 100%; margin-top: 10px; }
+        .spark-wrap svg { width: 100%; height: 28px; display: block; }
     </style>
 </head>
 <body>
-    <!-- SAFE DATA STORE -->
-    <div id="data-core" 
+    <!--
+        SAFE DATA STORE - rendered server-side via Jinja2.
+        data-sub falls back to window.location.href in JS if empty; the
+        "copy subscription link" button always copies window.location.href
+        (the exact URL actually opened) regardless of data-sub.
+    -->
+    <div id="data-core"
          data-user="{{ user.username | default('User') }}"
          data-status="{{ user.status | default('active') }}"
          data-used="{{ user.used_traffic | default(0) }}"
@@ -275,8 +365,29 @@
                 <span id="ui-status">Unknown</span>
             </div>
         </div>
-        <!-- STATS DASHBOARD -->
+        <!-- STATS DASHBOARD (bento layout: traffic card is primary/larger) -->
         <div class="stats-container">
+            <!-- Traffic -->
+            <div class="stat-card stat-primary">
+                <div style="position:relative; width:100px; height:100px;">
+                    <svg class="progress-circle">
+                        <defs>
+                            <linearGradient id="gradientTraffic" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1" />
+                                <stop offset="100%" stop-color="#ec4899" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-bar traffic-stroke" id="traffic-bar" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="stat-content">
+                        <span class="stat-num" id="ui-used">0 GB</span>
+                        <span class="stat-label">Used</span>
+                    </div>
+                </div>
+                <div class="stat-footer" id="ui-total">Total: ∞</div>
+                <div class="spark-wrap"><svg id="usage-spark" viewBox="0 0 100 28" preserveAspectRatio="none"></svg></div>
+            </div>
             <!-- Time -->
             <div class="stat-card">
                 <div style="position:relative; width:100px; height:100px;">
@@ -296,26 +407,6 @@
                     </div>
                 </div>
                 <div class="stat-footer" data-translate="remaining">Remaining</div>
-            </div>
-            <!-- Traffic -->
-            <div class="stat-card">
-                <div style="position:relative; width:100px; height:100px;">
-                    <svg class="progress-circle">
-                        <defs>
-                            <linearGradient id="gradientTraffic" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#ec4899" />
-                            </linearGradient>
-                        </defs>
-                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                        <circle class="circle-bar traffic-stroke" id="traffic-bar" cx="50" cy="50" r="45"></circle>
-                    </svg>
-                    <div class="stat-content">
-                        <span class="stat-num" id="ui-used">0 GB</span>
-                        <span class="stat-label">Used</span>
-                    </div>
-                </div>
-                <div class="stat-footer" id="ui-total">Total: ∞</div>
             </div>
         </div>
         <!-- MAIN ACTIONS -->
@@ -338,10 +429,15 @@
                 <button class="btn-copy-all" onclick="copyAll()">
                     <i class="ri-file-list-3-line"></i> <span data-translate="copy_all">کپی همه کانفیگ‌ها</span>
                 </button>
+                <div class="search-bar">
+                    <i class="ri-search-line"></i>
+                    <input type="text" id="config-search" placeholder="جستجوی کانفیگ..." oninput="filterConfigs()">
+                </div>
+                <div class="filter-chips" id="protocol-chips"></div>
                 <div id="config-list">
-                    <div style="text-align:center; padding:20px; color:var(--text-muted)">
-                        <i class="ri-loader-4-line" style="animation:spinSlow 1s linear infinite; font-size:1.5rem"></i>
-                    </div>
+                    <div class="skeleton-card"><div class="skeleton-box sk-icon"></div><div class="sk-lines"><div class="skeleton-box sk-line1"></div><div class="skeleton-box sk-line2"></div></div></div>
+                    <div class="skeleton-card"><div class="skeleton-box sk-icon"></div><div class="sk-lines"><div class="skeleton-box sk-line1"></div><div class="skeleton-box sk-line2"></div></div></div>
+                    <div class="skeleton-card"><div class="skeleton-box sk-icon"></div><div class="sk-lines"><div class="skeleton-box sk-line1"></div><div class="skeleton-box sk-line2"></div></div></div>
                 </div>
             </div>
         </div>
@@ -382,61 +478,67 @@
             <button class="btn-glow btn-glass" style="width:100%" onclick="closeModal()">Close</button>
         </div>
     </div>
-    
+
     <script>
-        // --- TRANSLATIONS (Now includes "unlimited") ---
+        // --- TRANSLATIONS ---
         const i18n = {
             fa: {
                 active: "فعال", limited: "محدود شده", expired: "منقضی", disabled: "غیرفعال", pending: "در انتظار",
-                unlimited: "حجم نامحدود", // <--- Added
+                unlimited: "حجم نامحدود",
                 days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
                 connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
-                copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl"
+                copied: "کپی شد!", scan: "اسکن کنید", dir: "rtl",
+                search_ph: "جستجوی کانفیگ...", all_chip: "همه",
+                no_results_title: "چیزی پیدا نشد", no_results_sub: "عبارت دیگه‌ای رو امتحان کن"
             },
             en: {
                 active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled", pending: "Pending",
-                unlimited: "Unlimited Data", // <--- Added
+                unlimited: "Unlimited Data",
                 days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
                 connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
-                copied: "Copied!", scan: "Scan QR", dir: "ltr"
+                copied: "Copied!", scan: "Scan QR", dir: "ltr",
+                search_ph: "Search configs...", all_chip: "All",
+                no_results_title: "No configs found", no_results_sub: "Try a different search"
             },
             ru: {
                 active: "Активный", limited: "Лимит", expired: "Истек", disabled: "Отключено", pending: "В ожидании",
-                unlimited: "Безлимит", // <--- Added
+                unlimited: "Безлимит",
                 days: "дней", remaining: "Осталось", copy_link: "Ссылка подписки",
                 connections: "Конфигурации", copy_all: "Копировать все", downloads: "Приложения",
-                copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr"
+                copied: "Скопировано!", scan: "Сканируйте QR", dir: "ltr",
+                search_ph: "Поиск конфигураций...", all_chip: "Все",
+                no_results_title: "Ничего не найдено", no_results_sub: "Попробуйте другой запрос"
             },
             ar: {
                 active: "نشط", limited: "محدود", expired: "منتهية", disabled: "معطل", pending: "قيد الانتظار",
-                unlimited: "بيانات غير محدودة", // <--- Added
+                unlimited: "بيانات غير محدودة",
                 days: "أيام", remaining: "متبقي", copy_link: "نسخ الرابط",
                 connections: "الاتصالات", copy_all: "نسخ الكل", downloads: "تنزيل",
-                copied: "تم النسخ!", scan: "مسح QR", dir: "rtl"
+                copied: "تم النسخ!", scan: "مسح QR", dir: "rtl",
+                search_ph: "البحث عن الإعدادات...", all_chip: "الكل",
+                no_results_title: "لا توجد نتائج", no_results_sub: "جرّب بحثًا مختلفًا"
             }
         };
         const supportedLangs = ['fa', 'en', 'ru', 'ar'];
-        
+
         // --- LOGIC ---
         const core = document.getElementById('data-core').dataset;
         let currentLang = localStorage.getItem('lang') || 'fa';
         let currentTheme = localStorage.getItem('theme') || 'dark';
-        
+
         function init() {
             setTheme(currentTheme);
             setLang(currentLang);
             document.getElementById('ui-username').textContent = core.user;
-            
+
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
-            stPill.className = 'status-pill'; 
+            stPill.className = 'status-pill';
 
             // --- SMART STATUS CLEANER ---
-            // 1. Get raw string
             let raw = (core.status || 'active').toLowerCase().trim();
-            let visualStatus = 'active'; // default
+            let visualStatus = 'active';
 
-            // 2. Check for keywords inside the string (strips prefixes like 'userstatus.')
             if (raw === 'false' || raw === 'off' || raw.includes('disabled') || raw.includes('deactive')) {
                 visualStatus = 'disabled';
             } else if (raw.includes('limited')) {
@@ -448,11 +550,10 @@
             } else if (raw === 'true' || raw === 'on' || raw.includes('active')) {
                 visualStatus = 'active';
             } else {
-                // Unknown fallback
-                visualStatus = raw; 
+                visualStatus = raw;
             }
-            
-            // 3. Time calculation (Visual only)
+
+            // Time calculation (client-side, no server now() needed)
             let daysLeft = 0;
             const expire = parseFloat(core.expire) || 0;
             if (expire) {
@@ -462,11 +563,11 @@
             } else {
                 daysLeft = Infinity;
             }
-            
-            // 4. Apply UI
+
             if (visualStatus === 'active') {
                 stPill.classList.add('st-active');
                 stText.textContent = i18n[currentLang].active;
+                document.querySelector('.avatar-wrapper')?.classList.add('pulse-active');
             } else if (visualStatus === 'limited') {
                 stPill.classList.add('st-limited');
                 stText.textContent = i18n[currentLang].limited;
@@ -475,7 +576,7 @@
                 stText.textContent = i18n[currentLang].expired;
             } else if (visualStatus === 'disabled') {
                 stPill.classList.add('st-expired');
-                stText.textContent = i18n[currentLang].disabled; 
+                stText.textContent = i18n[currentLang].disabled;
             } else if (visualStatus === 'pending') {
                 stPill.classList.add('st-limited');
                 stText.textContent = i18n[currentLang].pending;
@@ -483,43 +584,87 @@
                 stPill.classList.add('st-expired');
                 stText.textContent = visualStatus;
             }
-            
+
             renderStats(daysLeft, expire);
             fetchConfigs();
         }
-        
+
         function formatBytes(bytes) {
             if (!+bytes) return '0 MB';
             const k = 1024; const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
-        
+
         function renderStats(daysLeft, expireTimestamp) {
             const used = parseFloat(core.used) || 0;
             const limit = parseFloat(core.limit) || 0;
-            
-            document.getElementById('ui-used').textContent = formatBytes(used);
-            
-            // --- FIX FOR UNLIMITED TEXT ---
-            document.getElementById('ui-total').textContent = limit ? 
-                `Total: ${formatBytes(limit)}` : 
+
+            animateNumber(used);
+
+            document.getElementById('ui-total').textContent = limit ?
+                `Total: ${formatBytes(limit)}` :
                 i18n[currentLang].unlimited;
-            // -----------------------------
 
             const trPercent = limit ? Math.min((used/limit)*100, 100) : 0;
             animateCircle('traffic-bar', trPercent);
-            
+
             if(expireTimestamp) {
                 document.getElementById('ui-days').textContent = daysLeft;
-                const timeP = daysLeft > 0 ? 75 : 0; 
+                const timeP = daysLeft > 0 ? 75 : 0;
                 animateCircle('time-bar', timeP);
             } else {
                 document.getElementById('ui-days').textContent = '∞';
                 animateCircle('time-bar', 100);
             }
+            renderSparkline(trPercent);
         }
-        
+
+        // Count-up animation for the used-traffic number.
+        function animateNumber(targetBytes) {
+            const el = document.getElementById('ui-used');
+            if (!targetBytes) { el.textContent = formatBytes(0); return; }
+            const duration = 900; const start = performance.now();
+            function tick(now) {
+                const p = Math.min(1, (now - start) / duration);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = formatBytes(targetBytes * eased);
+                if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // Lightweight illustrative usage trend (no historical endpoint required):
+        // builds a smooth curve ending at the current usage percent so the
+        // stat card feels alive; purely decorative, not a data claim.
+        function renderSparkline(endPercent) {
+            const svg = document.getElementById('usage-spark');
+            if (!svg) return;
+            const points = 8;
+            const vals = [];
+            let seed = Math.max(5, endPercent);
+            for (let i = 0; i < points - 1; i++) {
+                const wobble = (Math.sin(i * 1.7) * 10);
+                vals.push(Math.max(2, Math.min(98, seed * (i / points) + wobble)));
+            }
+            vals.push(endPercent);
+            const w = 100, h = 28;
+            const step = w / (points - 1);
+            const coords = vals.map((v, i) => [i * step, h - (v / 100) * h]);
+            const path = coords.map((c, i) => (i === 0 ? `M${c[0]},${c[1]}` : `L${c[0]},${c[1]}`)).join(' ');
+            const areaPath = `${path} L${w},${h} L0,${h} Z`;
+            svg.innerHTML = `
+                <defs>
+                    <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+                <path d="${areaPath}" fill="url(#sparkFill)" stroke="none"></path>
+                <path d="${path}" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+            `;
+        }
+
         function animateCircle(id, percent) {
             setTimeout(() => {
                 const circle = document.getElementById(id);
@@ -529,58 +674,129 @@
                 circle.style.strokeDashoffset = offset;
             }, 300);
         }
-        
+
+        let allConfigLines = [];
+        let activeProtocolFilter = 'ALL';
+
         function fetchConfigs() {
             let url = core.sub; if(!url) url = window.location.href;
-            fetch(url).then(r => r.text()).then(txt => {
+            fetch(url, { headers: { 'Accept': 'text/plain, application/json' }, credentials: 'same-origin' })
+                .then(r => r.text()).then(txt => {
                 let decoded = txt;
                 try {
                     const clean = txt.replace(/\s/g, '');
                     if (/^[A-Za-z0-9+/=]+$/.test(clean)) decoded = atob(clean);
                 } catch(e){}
                 const lines = decoded.split(/\r?\n/).filter(x => x.trim().length > 5);
+                allConfigLines = lines;
+                renderProtocolChips();
                 renderConfigList(lines);
             }).catch(() => {
                 document.getElementById('config-list').innerHTML = `<div style="text-align:center; color:var(--danger)">Error loading configs</div>`;
             });
         }
-        
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+        function jsStr(s) {
+            return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+        }
+
+        function getProto(line) { return line.split('://')[0].toUpperCase(); }
+        function protoColor(proto) {
+            const map = { VLESS: 'var(--proto-vless)', VMESS: 'var(--proto-vmess)', TROJAN: 'var(--proto-trojan)', SS: 'var(--proto-ss)', SHADOWSOCKS: 'var(--proto-ss)', OVPN: 'var(--proto-ovp)' };
+            return map[proto] || 'var(--proto-default)';
+        }
+        function getConfigName(line, i) {
+            let name = `Config ${i+1}`;
+            if (line.includes('#')) {
+                const rawRemark = line.substring(line.indexOf('#') + 1);
+                if (rawRemark) { try { name = decodeURIComponent(rawRemark); } catch (e) { name = rawRemark; } }
+            }
+            return name;
+        }
+
+        function renderProtocolChips() {
+            const wrap = document.getElementById('protocol-chips');
+            if (!wrap) return;
+            const protos = Array.from(new Set(allConfigLines.map(getProto)));
+            if (protos.length <= 1) { wrap.innerHTML = ''; wrap.style.display = 'none'; return; }
+            wrap.style.display = 'flex';
+            const t = i18n[currentLang];
+            let html = `<div class="chip ${activeProtocolFilter === 'ALL' ? 'active' : ''}" onclick="setProtocolFilter('ALL')">${esc(t.all_chip)}</div>`;
+            protos.forEach(p => { html += `<div class="chip ${activeProtocolFilter === p ? 'active' : ''}" onclick="setProtocolFilter('${esc(p)}')">${esc(p)}</div>`; });
+            wrap.innerHTML = html;
+        }
+        function setProtocolFilter(proto) { activeProtocolFilter = proto; renderProtocolChips(); filterConfigs(); }
+
+        function filterConfigs() {
+            const q = (document.getElementById('config-search')?.value || '').trim().toLowerCase();
+            let filtered = allConfigLines;
+            if (activeProtocolFilter !== 'ALL') filtered = filtered.filter(l => getProto(l) === activeProtocolFilter);
+            if (q) filtered = filtered.filter((l, i) => getConfigName(l, i).toLowerCase().includes(q) || getProto(l).toLowerCase().includes(q));
+            renderConfigList(filtered);
+        }
+
         function renderConfigList(lines) {
             const container = document.getElementById('config-list'); container.innerHTML = '';
+            if (lines.length === 0) {
+                const t = i18n[currentLang];
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ri-inbox-line"></i>
+                        <div class="empty-title">${esc(t.no_results_title)}</div>
+                        <div class="empty-sub">${esc(t.no_results_sub)}</div>
+                    </div>`;
+                return;
+            }
             lines.forEach((line, i) => {
-                let proto = line.split('://')[0].toUpperCase();
-                let name = `Config ${i+1}`;
-                if(line.includes('#')) { try { name = decodeURIComponent(line.split('#').pop()); } catch(e){} }
+                let proto = getProto(line);
+                let name = getConfigName(line, i);
                 const card = document.createElement('div'); card.className = 'config-card';
+                card.style.animationDelay = `${Math.min(i, 12) * 45}ms`;
+                card.style.setProperty('--proto-accent', protoColor(proto));
                 card.innerHTML = `
                     <div class="prot-icon">${proto.substring(0,3)}</div>
-                    <div class="conf-info"><div class="conf-name">${name}</div><div class="conf-meta">${proto}</div></div>
-                    <button class="action-icon" onclick="copyTxt('${line}')"><i class="ri-file-copy-line"></i></button>
-                    <button class="action-icon" onclick="showQR('${line}')"><i class="ri-qr-code-line"></i></button>
-                    <textarea class="hidden-elm copy-target">${line}</textarea>
+                    <div class="conf-info"><div class="conf-name">${esc(name)}</div><div class="conf-meta">${esc(proto)}</div></div>
+                    <button class="action-icon" onclick="copyTxt(\`${jsStr(line)}\`, this)"><span class="icon-swap"><i class="ri-file-copy-line"></i></span></button>
+                    <button class="action-icon" onclick="showQR(\`${jsStr(line)}\`)"><i class="ri-qr-code-line"></i></button>
+                    <textarea class="hidden-elm copy-target">${esc(line)}</textarea>
                 `;
                 container.appendChild(card);
             });
         }
-        
-        function copyLink() { copyTxt(core.sub || window.location.href); }
+
+        function copyLink() { copyTxt(window.location.href); }
         function copyAll() {
             const targets = document.querySelectorAll('.copy-target'); let all = "";
             targets.forEach(t => all += t.value + "\n"); if(all) copyTxt(all);
         }
-        function copyTxt(txt) {
-            if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(showToast).catch(() => fallbackCopy(txt));
-            else fallbackCopy(txt);
+        function copyTxt(txt, btn) {
+            const onDone = () => { showToast(); flashCopied(btn); };
+            if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(onDone).catch(() => fallbackCopy(txt, btn));
+            else fallbackCopy(txt, btn);
         }
-        function fallbackCopy(txt) {
+        function fallbackCopy(txt, btn) {
             const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta);
-            ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast();
+            ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast(); flashCopied(btn);
+        }
+        function flashCopied(btn) {
+            if (!btn) return;
+            const icon = btn.querySelector('i');
+            if (!icon) return;
+            const original = icon.className;
+            icon.className = 'ri-check-line';
+            btn.classList.add('copied');
+            setTimeout(() => { icon.className = original; btn.classList.remove('copied'); }, 1200);
         }
         function showToast() {
             const t = document.getElementById('toast'); document.getElementById('toast-msg').textContent = i18n[currentLang].copied;
             t.classList.add('active'); setTimeout(() => t.classList.remove('active'), 2000);
         }
-        function showMainQR() { showQR(core.sub || window.location.href); }
+        function showMainQR() { showQR(window.location.href); }
         function showQR(txt) {
             const el = document.getElementById('qr-display'); el.innerHTML = '';
             new QRCode(el, { text: txt, width: 200, height: 200, colorDark: "#000", colorLight: "#fff" });
@@ -608,6 +824,9 @@
             document.querySelectorAll('[data-translate]').forEach(el => {
                 const k = el.getAttribute('data-translate'); if(i18n[l][k]) el.textContent = i18n[l][k];
             });
+            const searchInput = document.getElementById('config-search');
+            if (searchInput) searchInput.placeholder = i18n[l].search_ph;
+            renderProtocolChips();
         }
         window.onload = init;
     </script>

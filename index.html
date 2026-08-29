@@ -172,9 +172,9 @@
         }
         .traffic-stroke { stroke: url(#gradientTraffic); }
         .time-stroke { stroke: url(#gradientTime); }
-        .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 18px; }
-        .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
-        .stat-card.stat-primary .stat-num { font-size: 1.3rem; }
+        .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 18px; padding: 0 14px; }
+        .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.1rem; font-variant-numeric: tabular-nums; letter-spacing: -0.3px; white-space: nowrap; max-width: 100%; }
+        .stat-card.stat-primary .stat-num { font-size: clamp(0.72rem, 5.2vw, 1.05rem); }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
         .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); font-variant-numeric: tabular-nums; }
         .main-actions { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 30px; }

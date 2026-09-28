@@ -5,326 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>UserPanel</title>
     <meta name="theme-color" content="#09090b">
-    <!-- Fonts -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/font-face.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
     <link id="remixicon-css" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <!-- QR Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script>
-        (function () {
-            var primary = document.getElementById('remixicon-css');
-            var fallbackHref = 'https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css';
-            var swapped = false;
-
-            function swapToFallback() {
-                if (swapped) return;
-                swapped = true;
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = fallbackHref;
-                document.head.appendChild(link);
-            }
-
-            if (primary) primary.addEventListener('error', swapToFallback);
-
-            window.addEventListener('load', function () {
-                setTimeout(function () {
-                    var test = document.createElement('i');
-                    test.className = 'ri-home-line';
-                    test.style.position = 'absolute';
-                    test.style.visibility = 'hidden';
-                    test.style.fontSize = '32px';
-                    document.body.appendChild(test);
-                    var width = test.offsetWidth;
-                    document.body.removeChild(test);
-                    if (width === 0) swapToFallback();
-                }, 300);
-            });
-        })();
-    </script>
     <style>
         :root {
-            --font-fa: 'Vazirmatn', sans-serif;
-            --font-en: 'Outfit', sans-serif;
-            --font-ru: 'Rubik', sans-serif;
-            --bg-deep: #050508;
-            --bg-surface: #0e0e13;
-            --glass-base: rgba(18, 18, 26, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.45);
-            --accent: #ec4899;
-            --cyan: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --card-radius: 24px;
-            --btn-radius: 16px;
+            --font-fa: 'Vazirmatn', sans-serif; --font-en: 'Outfit', sans-serif;
+            --bg-deep: #050508; --bg-surface: #0e0e13;
+            --glass-base: rgba(18, 18, 26, 0.75); --glass-border: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1; --primary-glow: rgba(99, 102, 241, 0.5); --accent: #ec4899; --cyan: #06b6d4;
+            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --text-main: #f8fafc; --text-muted: #94a3b8;
+            --card-radius: 22px; --btn-radius: 14px;
             --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.7);
-            --neon-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
             --proto-vless: #a78bfa; --proto-vmess: #60a5fa; --proto-trojan: #f472b6; --proto-ss: #34d399; --proto-ovp: #fbbf24; --proto-default: #9ca3af;
         }
         body.light-theme {
-            --bg-deep: #f1f5f9;
-            --bg-surface: #ffffff;
-            --glass-base: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(0, 0, 0, 0.06);
-            --primary: #4f46e5;
-            --primary-glow: rgba(79, 70, 229, 0.2);
-            --accent: #db2777;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.08);
-            --neon-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
+            --bg-deep: #f1f5f9; --bg-surface: #ffffff; --glass-base: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.06); --primary: #4f46e5; --accent: #db2777;
+            --text-main: #0f172a; --text-muted: #64748b;
         }
         *, *::before, *::after { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body {
-            margin: 0; padding: 0; font-family: var(--font-fa);
-            background-color: var(--bg-deep); color: var(--text-main);
-            min-height: 100vh; display: flex; justify-content: center;
-            overflow-x: hidden; transition: background 0.5s ease;
-        }
-        .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
-        .ambient-light::after {
-            content: ''; position: absolute; inset: 0; opacity: 0.035; pointer-events: none; mix-blend-mode: overlay;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; animation: floatOrb 12s infinite alternate ease-in-out; transition: background 1.5s ease; }
-        .orb-1 { width: 340px; height: 340px; background: var(--primary); top: -60px; left: -60px; }
-        .orb-2 { width: 280px; height: 280px; background: var(--accent); bottom: -60px; right: -60px; animation-duration: 16s; animation-delay: -3s; }
-        .orb-3 { width: 220px; height: 220px; background: var(--cyan); top: 40%; left: 35%; animation-duration: 20s; opacity: 0.35; }
-        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(35px, 60px) scale(1.12); } }
-        
-        body.theme-status-limited .orb-1 { background: var(--warning); }
-        body.theme-status-limited .orb-2 { background: #d97706; }
-        body.theme-status-expired .orb-1 { background: var(--danger); }
-        body.theme-status-expired .orb-2 { background: #991b1b; }
+        body { margin: 0; padding: 0; font-family: var(--font-fa); background-color: var(--bg-deep); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; overflow-x: hidden; }
+        .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; animation: floatOrb 12s infinite alternate ease-in-out; }
+        .orb-1 { width: 320px; height: 320px; background: var(--primary); top: -50px; left: -50px; }
+        .orb-2 { width: 260px; height: 260px; background: var(--accent); bottom: -50px; right: -50px; animation-duration: 15s; }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
 
-        .main-container { width: 100%; max-width: 520px; padding: 25px; padding-bottom: 120px; position: relative; z-index: 10; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .logo-icon { font-size: 1.6rem; color: var(--primary); animation: spinSlow 12s linear infinite; }
-        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
-        .logo-text { font-family: var(--font-en); font-weight: 900; font-size: 1.3rem; letter-spacing: -0.5px; }
-        .nav-actions { display: flex; gap: 10px; }
-        .icon-btn {
-            width: 44px; height: 44px; border-radius: 14px;
-            background: var(--glass-base); border: 1px solid var(--glass-border);
-            color: var(--text-main); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.25s ease; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            font-size: 1.2rem; position: relative;
-        }
-        .icon-btn:hover { background: var(--bg-surface); border-color: var(--primary); color: var(--primary); transform: translateY(-2px); box-shadow: var(--neon-shadow); }
-        .icon-btn:active { transform: scale(0.94); }
-        .lang-badge { position: absolute; bottom: -5px; right: -5px; font-size: 0.6rem; background: var(--primary); color: #fff; padding: 2px 5px; border-radius: 6px; font-weight: bold; }
-        
-        .hero-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.015) 100%);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-top: 1px solid rgba(255,255,255,0.18);
-            border-radius: var(--card-radius); padding: 30px 20px; text-align: center;
-            position: relative; overflow: hidden; box-shadow: var(--shadow-xl); margin-bottom: 25px;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .avatar-wrapper {
-            width: 86px; height: 86px; margin: 0 auto 15px; border-radius: 50%; padding: 3px;
-            background: linear-gradient(135deg, var(--primary), var(--accent)); position: relative;
-        }
-        .avatar-inner { width: 100%; height: 100%; background: var(--bg-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .avatar-inner i { font-size: 2.8rem; color: var(--text-main); }
-        .username { font-size: 1.55rem; font-weight: 800; margin: 0; color: var(--text-main); }
-        .status-pill {
-            display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; padding: 6px 16px;
-            border-radius: 50px; font-size: 0.82rem; font-weight: 600;
-            background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.1);
-        }
-        body.light-theme .status-pill { background: #fff; border-color: #e2e8f0; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; box-shadow: 0 0 10px currentColor; }
-        .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); }
+        .main-container { width: 100%; max-width: 500px; padding: 20px; padding-bottom: 120px; position: relative; z-index: 10; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-icon { font-size: 1.5rem; color: var(--primary); }
+        .logo-text { font-family: var(--font-en); font-weight: 900; font-size: 1.3rem; }
+        .nav-actions { display: flex; gap: 8px; }
+        .icon-btn { width: 42px; height: 42px; border-radius: 12px; background: var(--glass-base); border: 1px solid var(--glass-border); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.15rem; position: relative; }
+        .lang-badge { position: absolute; bottom: -4px; right: -4px; font-size: 0.6rem; background: var(--primary); color: #fff; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
+
+        .hero-card { background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: var(--card-radius); padding: 24px 20px; text-align: center; margin-bottom: 20px; box-shadow: var(--shadow-xl); backdrop-filter: blur(15px); }
+        .avatar-wrapper { width: 80px; height: 80px; margin: 0 auto 12px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--primary), var(--accent)); }
+        .avatar-inner { width: 100%; height: 100%; background: var(--bg-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .avatar-inner i { font-size: 2.6rem; color: var(--text-main); }
+        .username { font-size: 1.45rem; font-weight: 800; margin: 0; }
+        .status-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 5px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+        .st-active { color: var(--success); } .st-active .status-dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
         .st-limited { color: var(--warning); } .st-limited .status-dot { background: var(--warning); }
         .st-expired { color: var(--danger); } .st-expired .status-dot { background: var(--danger); }
+
+        .stats-container { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: var(--card-radius); padding: 18px 14px; display: flex; flex-direction: column; align-items: center; position: relative; backdrop-filter: blur(15px); }
+        .progress-circle { width: 100px; height: 100px; transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+        body.light-theme .circle-bg { stroke: rgba(0,0,0,0.06); }
         
-        .stats-container { display: grid; grid-template-columns: 1.25fr 1fr; gap: 15px; margin-bottom: 25px; align-items: stretch; }
-        .stat-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: var(--card-radius);
-            padding: 20px; display: flex; flex-direction: column; align-items: center; position: relative; transition: 0.3s;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        }
-        .progress-circle { width: 105px; height: 105px; transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 8; }
-        body.light-theme .circle-bg { stroke: rgba(0,0,0,0.05); }
         .circle-bar {
-            fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283;
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
             transition: stroke-dashoffset 1.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .traffic-stroke { stroke: url(#gradientTraffic); }
         .time-stroke { stroke: url(#gradientTime); }
-        .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 105px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .stat-content { position: absolute; top: 0; left: 0; width: 100%; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .stat-num { font-family: var(--font-en); font-weight: 800; font-size: 1.05rem; }
         .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        .stat-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
-        
-        .main-actions { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 25px; }
-        .btn-glow {
-            border: none; padding: 15px; border-radius: var(--btn-radius); font-family: inherit; font-size: 0.95rem; font-weight: 700;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.25s ease;
-        }
-        .btn-glow:active { transform: scale(0.96); }
-        .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 8px 25px -5px var(--primary-glow); }
-        .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 12px 30px -5px var(--primary-glow); }
-        .btn-glass { background: var(--glass-base); color: var(--text-main); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
-        
-        .quick-import-panel {
-            background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: 18px;
-            padding: 12px 16px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        }
-        .quick-import-title { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
-        .quick-import-buttons { display: flex; gap: 8px; }
-        .app-quick-btn {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); border-radius: 10px;
-            padding: 6px 12px; font-size: 0.78rem; font-weight: 700; color: var(--text-main); text-decoration: none;
-            display: flex; align-items: center; gap: 5px; transition: 0.2s ease;
-        }
-        .app-quick-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .stat-footer { margin-top: 12px; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
 
-        .section-box { margin-bottom: 25px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; cursor: pointer; }
-        .section-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .main-actions { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 20px; }
+        .btn-glow { border: none; padding: 15px; border-radius: var(--btn-radius); font-family: inherit; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-glow:active { transform: scale(0.97); }
+        .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 8px 25px -5px var(--primary-glow); }
+        .btn-glass { background: var(--glass-base); color: var(--text-main); border: 1px solid var(--glass-border); }
+
+        .section-box { margin-bottom: 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px; cursor: pointer; }
+        .section-title { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .section-title i { color: var(--accent); }
         .toggle-arrow { transition: 0.3s; }
-        .active-section .toggle-arrow { transform: rotate(180deg); }
+        .active-section .toggle-arrow { transform: rotate(180deg); color: var(--primary); }
         .section-content { display: none; }
-        .section-content.open { display: block; animation: fadeIn 0.4s ease; }
-        
-        .btn-copy-all {
-            width: 100%; padding: 12px; margin-bottom: 12px; background: rgba(16, 185, 129, 0.12); color: var(--success);
-            border: 1px dashed var(--success); border-radius: 14px; cursor: pointer; font-weight: 700; font-size: 0.9rem;
-            transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn-copy-all:hover { background: var(--success); color: #fff; }
-        .btn-copy-all:active { transform: scale(0.98); }
+        .section-content.open { display: block; animation: fadeIn 0.3s ease; }
 
-        .config-controls { display: flex; gap: 8px; margin-bottom: 12px; }
-        .search-bar {
-            flex: 1; display: flex; align-items: center; gap: 10px; background: var(--glass-base);
-            border: 1px solid var(--glass-border); border-radius: 14px; padding: 10px 16px;
-        }
-        .search-bar input { flex: 1; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 0.88rem; }
-        .view-switch-btn {
-            width: 44px; height: 44px; border-radius: 14px; background: var(--glass-base);
-            border: 1px solid var(--glass-border); color: var(--text-muted); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.2s; font-size: 1.15rem;
-        }
-        .view-switch-btn:hover { color: var(--text-main); border-color: var(--primary); }
+        .btn-copy-all { width: 100%; padding: 12px; margin-bottom: 12px; background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px dashed var(--success); border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .config-controls { display: flex; gap: 8px; margin-bottom: 10px; }
+        .search-bar { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: 12px; padding: 8px 14px; }
+        .search-bar input { flex: 1; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 0.85rem; }
+        .view-switch-btn { width: 40px; height: 40px; border-radius: 12px; background: var(--glass-base); border: 1px solid var(--glass-border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-        .filter-chips { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .filter-chips { display: flex; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
         .filter-chips::-webkit-scrollbar { display: none; }
-        .chip {
-            padding: 6px 14px; border-radius: 50px; font-size: 0.78rem; font-weight: 600;
-            background: var(--glass-base); border: 1px solid var(--glass-border); color: var(--text-muted); cursor: pointer; white-space: nowrap;
-        }
+        .chip { flex-shrink: 0; padding: 5px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; background: var(--glass-base); border: 1px solid var(--glass-border); color: var(--text-muted); cursor: pointer; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Configuration Cards */
-        .config-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border); border-left: 3.5px solid transparent; padding: 14px 16px; border-radius: 18px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 12px; transition: transform 0.2s ease, border-color 0.2s ease;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        }
-        .config-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.18); }
-        .prot-icon {
-            width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,0.06);
-            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; flex-shrink: 0;
-        }
+        .config-card { background: var(--glass-base); border: 1px solid var(--glass-border); border-left: 3.5px solid transparent; padding: 12px 14px; border-radius: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; contain: content; }
+        .prot-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.72rem; flex-shrink: 0; }
         .conf-info { flex: 1; overflow: hidden; }
-        .conf-header { display: flex; align-items: center; gap: 6px; }
-        .conf-flag { font-size: 1.05rem; line-height: 1; }
-        .conf-name { font-weight: 600; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .conf-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .conf-meta-row { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
         .conf-meta { font-size: 0.72rem; color: var(--text-muted); }
-        .ping-pill {
-            display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 600;
-            padding: 1px 7px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: var(--success);
-        }
+        .ping-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 0.68rem; font-weight: 600; padding: 1px 6px; border-radius: 5px; background: rgba(16, 185, 129, 0.12); color: var(--success); }
         .ping-pill.moderate { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
         .ping-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-        .action-icon {
-            width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; background: transparent; color: var(--text-muted); border: none; font-size: 1.15rem; transition: 0.2s;
-        }
-        .action-icon:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
-        .action-icon:active { transform: scale(0.9); }
+        .action-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent; color: var(--text-muted); border: none; font-size: 1.1rem; }
         .action-icon.copied { color: var(--success) !important; transform: scale(1.15); }
 
-        /* Compact Layout */
-        #config-list.compact-view .config-card { padding: 9px 12px; margin-bottom: 6px; border-radius: 12px; }
-        #config-list.compact-view .prot-icon { width: 32px; height: 32px; font-size: 0.68rem; border-radius: 8px; }
-        #config-list.compact-view .conf-name { font-size: 0.85rem; }
-        #config-list.compact-view .action-icon { width: 32px; height: 32px; font-size: 1rem; }
+        #config-list.compact-view .config-card { padding: 8px 10px; margin-bottom: 5px; border-radius: 10px; }
+        #config-list.compact-view .prot-icon { width: 30px; height: 30px; font-size: 0.65rem; }
 
-        /* Shimmer Skeletons */
-        .skeleton-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border); border-radius: 18px;
-            padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px;
-        }
-        .skeleton-shimmer {
-            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
-            background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .app-card-wrapper { background: var(--glass-base); border: 1px solid var(--glass-border); padding: 14px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .app-card-wrapper i { font-size: 2rem; margin-bottom: 6px; color: var(--text-muted); }
+        .app-name { font-size: 0.92rem; font-weight: 800; color: var(--text-main); }
+        .app-os { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px; }
+        .app-actions { display: flex; gap: 6px; width: 100%; }
+        .app-btn { flex: 1; padding: 7px 4px; border-radius: 9px; font-size: 0.75rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; border: none; }
+        .app-btn-download { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+        .app-btn-import { background: var(--primary); color: #fff; }
 
-        .app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .app-card {
-            background: var(--glass-base); border: 1px solid var(--glass-border); padding: 16px; border-radius: 16px;
-            display: flex; flex-direction: column; align-items: center; text-align: center; text-decoration: none; color: var(--text-main);
-            transition: 0.25s ease;
-        }
-        .app-card:hover { transform: translateY(-3px); border-color: var(--cyan); background: var(--bg-surface); }
-        .app-card i { font-size: 1.8rem; margin-bottom: 8px; color: var(--text-muted); }
-
-        .toast-box {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: rgba(16, 185, 129, 0.95); backdrop-filter: blur(12px); color: #fff; padding: 12px 28px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); font-weight: 700; display: flex; align-items: center; gap: 8px;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; opacity: 0; pointer-events: none;
-        }
+        .toast-box { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(16, 185, 129, 0.96); color: #fff; padding: 10px 24px; border-radius: 50px; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.3s ease; z-index: 9999; opacity: 0; pointer-events: none; }
         .toast-box.active { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
-            z-index: 10000; opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; opacity: 0; visibility: hidden; transition: 0.25s; display: flex; align-items: center; justify-content: center; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-body {
-            background: var(--bg-surface); padding: 30px; border-radius: 30px; width: 90%; max-width: 340px; text-align: center;
-            border: 1px solid var(--glass-border);
-        }
-        #qr-display { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: fit-content; }
-        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .modal-body { background: var(--bg-surface); padding: 25px; border-radius: 24px; width: 88%; max-width: 320px; text-align: center; border: 1px solid var(--glass-border); }
+        #qr-display { background: #fff; padding: 12px; border-radius: 14px; margin: 15px auto; width: fit-content; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
     <div id="data-core"
-         data-user="User"
-         data-status="active"
-         data-used="0"
-         data-limit="0"
-         data-expire="0"
-         data-sub=""
+         data-user="{{ user.username | default('User') }}"
+         data-status="{{ user.status | default('active') }}"
+         data-used="{{ user.used_traffic | default(0) }}"
+         data-limit="{{ user.data_limit | default(0) }}"
+         data-expire="{{ user.expire | default(0) }}"
+         data-sub="{{ subscription_url | default('') }}"
          style="display:none;">
     </div>
 
     <div class="ambient-light">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
     </div>
     
     <div class="main-container">
@@ -334,41 +159,28 @@
                 <span class="logo-text">Ni<span style="color:var(--accent)">Ros</span></span>
             </div>
             <div class="nav-actions">
-                <button class="icon-btn" onclick="toggleTheme()" title="Change Theme">
-                    <i class="ri-moon-clear-line" id="theme-icon"></i>
-                </button>
-                <button class="icon-btn" onclick="cycleLang()" title="Change Language">
-                    <i class="ri-translate-2"></i>
-                    <span class="lang-badge" id="current-lang-badge">FA</span>
-                </button>
+                <button class="icon-btn" onclick="toggleTheme()"><i class="ri-moon-clear-line" id="theme-icon"></i></button>
+                <button class="icon-btn" onclick="cycleLang()"><i class="ri-translate-2"></i><span class="lang-badge" id="current-lang-badge">FA</span></button>
             </div>
         </nav>
 
         <div class="hero-card">
-            <div class="avatar-wrapper">
-                <div class="avatar-inner">
-                    <i class="ri-user-smile-line"></i>
-                </div>
-            </div>
+            <div class="avatar-wrapper"><div class="avatar-inner"><i class="ri-user-smile-line"></i></div></div>
             <h1 class="username" id="ui-username">Guest User</h1>
-            <div class="status-pill" id="status-pill">
-                <span class="status-dot"></span>
-                <span id="ui-status">Unknown</span>
-            </div>
+            <div class="status-pill" id="status-pill"><span class="status-dot"></span><span id="ui-status">Unknown</span></div>
         </div>
 
         <div class="stats-container">
             <div class="stat-card">
-                <div style="position:relative; width:105px; height:105px;">
+                <div style="position:relative; width:100px; height:100px;">
                     <svg class="progress-circle">
                         <defs>
                             <linearGradient id="gradientTraffic" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#ec4899" />
+                                <stop offset="0%" stop-color="#6366f1" /><stop offset="100%" stop-color="#ec4899" />
                             </linearGradient>
                         </defs>
-                        <circle class="circle-bg" cx="52.5" cy="52.5" r="45"></circle>
-                        <circle class="circle-bar traffic-stroke" id="traffic-bar" cx="52.5" cy="52.5" r="45"></circle>
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-bar traffic-stroke" id="traffic-bar" cx="50" cy="50" r="45"></circle>
                     </svg>
                     <div class="stat-content">
                         <span class="stat-num" id="ui-used">0 B</span>
@@ -378,16 +190,15 @@
                 <div class="stat-footer" id="ui-total">Total: ∞</div>
             </div>
             <div class="stat-card">
-                <div style="position:relative; width:105px; height:105px;">
+                <div style="position:relative; width:100px; height:100px;">
                     <svg class="progress-circle">
                         <defs>
                             <linearGradient id="gradientTime" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#06b6d4" />
-                                <stop offset="100%" stop-color="#10b981" />
+                                <stop offset="0%" stop-color="#06b6d4" /><stop offset="100%" stop-color="#10b981" />
                             </linearGradient>
                         </defs>
-                        <circle class="circle-bg" cx="52.5" cy="52.5" r="45"></circle>
-                        <circle class="circle-bar time-stroke" id="time-bar" cx="52.5" cy="52.5" r="45"></circle>
+                        <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="circle-bar time-stroke" id="time-bar" cx="50" cy="50" r="45"></circle>
                     </svg>
                     <div class="stat-content">
                         <span class="stat-num" id="ui-days">∞</span>
@@ -398,30 +209,20 @@
             </div>
         </div>
 
-        <!-- Quick Import Deep Links -->
-        <div class="quick-import-panel">
-            <span class="quick-import-title"><i class="ri-flashlight-line"></i> اتصال سریع:</span>
-            <div class="quick-import-buttons">
-                <a id="btn-import-v2ray" href="#" class="app-quick-btn">v2rayNG</a>
-                <a id="btn-import-v2box" href="#" class="app-quick-btn">V2Box</a>
-                <a id="btn-import-singbox" href="#" class="app-quick-btn">Sing-Box</a>
-            </div>
-        </div>
-
         <div class="main-actions">
             <button class="btn-glow btn-primary" onclick="copyLink()">
                 <i class="ri-file-copy-2-line"></i>
                 <span data-translate="copy_link">کپی لینک اشتراک</span>
             </button>
-            <button class="btn-glow btn-glass" style="width:52px; padding:0;" onclick="showMainQR()">
-                <i class="ri-qr-code-line" style="font-size:1.25rem;"></i>
+            <button class="btn-glow btn-glass" style="width:50px; padding:0;" onclick="showMainQR()">
+                <i class="ri-qr-code-line" style="font-size:1.2rem;"></i>
             </button>
         </div>
 
         <div class="section-box">
             <div class="section-header active-section" onclick="toggleSection('configs-area', this)">
                 <span class="section-title"><i class="ri-server-line"></i> <span data-translate="connections">کانکشن‌ها</span></span>
-                <i class="ri-arrow-down-s-line toggle-arrow" style="font-size:1.2rem"></i>
+                <i class="ri-arrow-down-s-line toggle-arrow" style="font-size:1.15rem"></i>
             </div>
             <div id="configs-area" class="section-content open">
                 <button class="btn-copy-all" onclick="copyAll()">
@@ -437,11 +238,7 @@
                     </button>
                 </div>
                 <div class="filter-chips" id="protocol-chips"></div>
-                <div id="config-list">
-                    <!-- Shimmer Loader Placeholders -->
-                    <div class="skeleton-card"><div class="skeleton-shimmer" style="width:42px; height:42px; border-radius:12px;"></div><div style="flex:1"><div class="skeleton-shimmer" style="height:14px; width:65%; margin-bottom:8px;"></div><div class="skeleton-shimmer" style="height:10px; width:35%;"></div></div></div>
-                    <div class="skeleton-card"><div class="skeleton-shimmer" style="width:42px; height:42px; border-radius:12px;"></div><div style="flex:1"><div class="skeleton-shimmer" style="height:14px; width:55%; margin-bottom:8px;"></div><div class="skeleton-shimmer" style="height:10px; width:30%;"></div></div></div>
-                </div>
+                <div id="config-list"></div>
             </div>
         </div>
 
@@ -452,55 +249,62 @@
             </div>
             <div id="apps-area" class="section-content">
                 <div class="app-grid">
-                    <a href="https://github.com/2dust/v2rayNG/releases/latest" target="_blank" rel="noopener noreferrer" class="app-card">
-                        <i class="ri-android-fill"></i> <span class="app-name">v2rayNG</span> <span class="app-os">Android</span>
-                    </a>
-                    <a href="https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690" target="_blank" rel="noopener noreferrer" class="app-card">
-                        <i class="ri-apple-fill"></i> <span class="app-name">V2Box</span> <span class="app-os">iOS</span>
-                    </a>
-                    <a href="https://github.com/2dust/v2rayN/releases" target="_blank" rel="noopener noreferrer" class="app-card">
-                        <i class="ri-windows-fill"></i> <span class="app-name">v2rayN</span> <span class="app-os">Windows</span>
-                    </a>
-                    <a href="https://github.com/MatsuriDayo/nekoray/releases" target="_blank" rel="noopener noreferrer" class="app-card">
-                        <i class="ri-ubuntu-fill"></i> <span class="app-name">Nekoray</span> <span class="app-os">Linux</span>
-                    </a>
+                    <div class="app-card-wrapper">
+                        <i class="ri-android-fill"></i>
+                        <span class="app-name">v2rayNG</span>
+                        <span class="app-os">Android</span>
+                        <div class="app-actions">
+                            <a href="https://github.com/2dust/v2rayNG/releases/latest" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-download"><i class="ri-download-2-line"></i></a>
+                            <button onclick="importToApp('v2rayng')" class="app-btn app-btn-import"><i class="ri-flashlight-line"></i> اتصال</button>
+                        </div>
+                    </div>
+                    <div class="app-card-wrapper">
+                        <i class="ri-apple-fill"></i>
+                        <span class="app-name">V2Box</span>
+                        <span class="app-os">iOS / Mac</span>
+                        <div class="app-actions">
+                            <a href="https://apps.apple.com/us/app/v2box-v2ray-client/id6446814690" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-download"><i class="ri-download-2-line"></i></a>
+                            <button onclick="importToApp('v2box')" class="app-btn app-btn-import"><i class="ri-flashlight-line"></i> اتصال</button>
+                        </div>
+                    </div>
+                    <div class="app-card-wrapper">
+                        <i class="ri-box-3-line"></i>
+                        <span class="app-name">Sing-Box</span>
+                        <span class="app-os">Universal</span>
+                        <div class="app-actions">
+                            <a href="https://github.com/SagerNet/sing-box/releases/latest" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-download"><i class="ri-download-2-line"></i></a>
+                            <button onclick="importToApp('singbox')" class="app-btn app-btn-import"><i class="ri-flashlight-line"></i> اتصال</button>
+                        </div>
+                    </div>
+                    <div class="app-card-wrapper">
+                        <i class="ri-windows-fill"></i>
+                        <span class="app-name">v2rayN</span>
+                        <span class="app-os">Windows</span>
+                        <div class="app-actions">
+                            <a href="https://github.com/2dust/v2rayN/releases" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-download" style="flex:1"><i class="ri-download-2-line"></i> دانلود</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="toast-box" id="toast">
-        <i class="ri-checkbox-circle-fill"></i> <span id="toast-msg">Copied!</span>
-    </div>
+    <div class="toast-box" id="toast"><i class="ri-checkbox-circle-fill"></i> <span id="toast-msg">Copied!</span></div>
 
     <div class="modal-overlay" id="modal" onclick="closeModal()">
         <div class="modal-body" onclick="event.stopPropagation()">
             <h3 style="margin-top:0; margin-bottom:10px;">QR Code</h3>
             <div id="qr-display"></div>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:20px;">Scan to import</p>
             <button class="btn-glow btn-glass" style="width:100%" onclick="closeModal()">Close</button>
         </div>
     </div>
 
     <script>
         const i18n = {
-            fa: {
-                active: "فعال", limited: "محدود شده", expired: "منقضی", disabled: "غیرفعال", pending: "در انتظار",
-                unlimited: "حجم نامحدود", days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک",
-                connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها",
-                copied: "کپی شد!", dir: "rtl", search_ph: "جستجوی کانفیگ...", all_chip: "همه",
-                no_results_title: "چیزی پیدا نشد", no_results_sub: "عبارت دیگری را جستجو کنید"
-            },
-            en: {
-                active: "Active", limited: "Limited", expired: "Expired", disabled: "Disabled", pending: "Pending",
-                unlimited: "Unlimited Data", days: "Days", remaining: "Remaining", copy_link: "Copy Subscription",
-                connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads",
-                copied: "Copied!", dir: "ltr", search_ph: "Search configs...", all_chip: "All",
-                no_results_title: "No configs found", no_results_sub: "Try a different search"
-            }
+            fa: { active: "فعال", limited: "محدود شده", expired: "منقضی", unlimited: "حجم نامحدود", days: "روز", remaining: "باقی‌مانده", copy_link: "کپی لینک اشتراک", connections: "کانکشن‌ها", copy_all: "کپی همه کانفیگ‌ها", downloads: "دانلود برنامه‌ها", copied: "کپی شد!", dir: "rtl", search_ph: "جستجوی کانفیگ...", all_chip: "همه", no_results_title: "چیزی پیدا نشد", no_results_sub: "عبارت دیگری را امتحان کنید" },
+            en: { active: "Active", limited: "Limited", expired: "Expired", unlimited: "Unlimited Data", days: "Days", remaining: "Remaining", copy_link: "Copy Subscription", connections: "Connections", copy_all: "Copy All Configs", downloads: "Downloads", copied: "Copied!", dir: "ltr", search_ph: "Search configs...", all_chip: "All", no_results_title: "No configs found", no_results_sub: "Try a different search" }
         };
         const supportedLangs = ['fa', 'en'];
-
         const core = document.getElementById('data-core').dataset;
         let currentLang = localStorage.getItem('lang') || 'fa';
         let currentTheme = localStorage.getItem('theme') || 'dark';
@@ -512,29 +316,16 @@
             setTheme(currentTheme);
             setLang(currentLang);
             updateCompactViewUI();
-            setupDeepLinks();
 
             document.getElementById('ui-username').textContent = core.user || 'User';
-
             const stPill = document.getElementById('status-pill');
             const stText = document.getElementById('ui-status');
             const raw = (core.status || 'active').toLowerCase().trim();
 
             stPill.className = 'status-pill';
-            document.body.classList.remove('theme-status-limited', 'theme-status-expired');
-
-            if (raw.includes('active') || raw === 'true') {
-                stPill.classList.add('st-active');
-                stText.textContent = i18n[currentLang].active;
-            } else if (raw.includes('limited')) {
-                stPill.classList.add('st-limited');
-                stText.textContent = i18n[currentLang].limited;
-                document.body.classList.add('theme-status-limited');
-            } else {
-                stPill.classList.add('st-expired');
-                stText.textContent = i18n[currentLang].expired;
-                document.body.classList.add('theme-status-expired');
-            }
+            if (raw.includes('active') || raw === 'true') { stPill.classList.add('st-active'); stText.textContent = i18n[currentLang].active; }
+            else if (raw.includes('limited')) { stPill.classList.add('st-limited'); stText.textContent = i18n[currentLang].limited; }
+            else { stPill.classList.add('st-expired'); stText.textContent = i18n[currentLang].expired; }
 
             let daysLeft = Infinity;
             const expire = parseFloat(core.expire) || 0;
@@ -547,85 +338,87 @@
             fetchConfigs();
         }
 
-        function setupDeepLinks() {
-            const subUrl = encodeURIComponent(core.sub || window.location.href);
-            const v2rayBtn = document.getElementById('btn-import-v2ray');
-            const v2boxBtn = document.getElementById('btn-import-v2box');
-            const singboxBtn = document.getElementById('btn-import-singbox');
+        function getAbsoluteSubUrl() {
+            let s = core.sub || window.location.href;
+            try {
+                return new URL(s, window.location.origin).href;
+            } catch(e) {
+                return window.location.href;
+            }
+        }
 
-            if (v2rayBtn) v2rayBtn.href = `v2rayng://install-config?url=${subUrl}`;
-            if (v2boxBtn) v2boxBtn.href = `v2box://install-sub?url=${subUrl}&name=Subscription`;
-            if (singboxBtn) singboxBtn.href = `sing-box://import-remote-profile?url=${subUrl}#Subscription`;
+        function importToApp(app) {
+            const fullUrl = getAbsoluteSubUrl();
+            copyTxt(fullUrl);
+
+            const encoded = encodeURIComponent(fullUrl);
+            if (app === 'v2rayng') {
+                window.location.href = `v2rayng://install-sub?url=${encoded}`;
+                setTimeout(() => { window.location.href = 'v2rayng://'; }, 600);
+            } else if (app === 'v2box') {
+                window.location.href = `v2box://install-sub?url=${encoded}&name=Subscription`;
+            } else if (app === 'singbox') {
+                window.location.href = `sing-box://import-remote-profile?url=${encoded}#Subscription`;
+            }
         }
 
         function formatBytes(bytes) {
             if (!+bytes) return '0 B';
-            const k = 1024;
-            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const k = 1024; const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function animateCountUp(targetBytes) {
-            const el = document.getElementById('ui-used');
-            if (!targetBytes) { el.textContent = '0 B'; return; }
-            const duration = 1200;
-            const startTime = performance.now();
-
-            function tick(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                // Ease Out Cubic
-                const easeProgress = 1 - Math.pow(1 - progress, 3);
-                el.textContent = formatBytes(targetBytes * easeProgress);
-
-                if (progress < 1) {
-                    requestAnimationFrame(tick);
-                } else {
-                    el.textContent = formatBytes(targetBytes);
-                }
-            }
-            requestAnimationFrame(tick);
         }
 
         function renderStats(daysLeft, expireTimestamp) {
             const used = parseFloat(core.used) || 0;
             const limit = parseFloat(core.limit) || 0;
-
             animateCountUp(used);
             document.getElementById('ui-total').textContent = limit ? `Total: ${formatBytes(limit)}` : i18n[currentLang].unlimited;
 
-            const trPercent = limit > 0 ? Math.min((used / limit) * 100, 100) : 0;
+            // انیمیشن دایره مصرف: در حالت نامحدود دایره 100% پر می شود
+            const trPercent = limit > 0 ? Math.min((used / limit) * 100, 100) : 100;
             animateCircle('traffic-bar', trPercent);
 
             if (expireTimestamp > 0) {
                 document.getElementById('ui-days').textContent = daysLeft;
-                animateCircle('time-bar', daysLeft > 0 ? Math.min((daysLeft / 30) * 100, 100) : 0);
+                const timeP = daysLeft > 0 ? Math.min((daysLeft / 30) * 100, 100) : 0;
+                animateCircle('time-bar', timeP);
             } else {
                 document.getElementById('ui-days').textContent = '∞';
                 animateCircle('time-bar', 100);
             }
         }
 
+        function animateCountUp(targetBytes) {
+            const el = document.getElementById('ui-used');
+            if (!targetBytes) { el.textContent = '0 B'; return; }
+            const duration = 1200; const startTime = performance.now();
+            function tick(now) {
+                const p = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = formatBytes(targetBytes * eased);
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = formatBytes(targetBytes);
+            }
+            requestAnimationFrame(tick);
+        }
+
         function animateCircle(id, percent) {
-            const circle = document.getElementById(id);
-            if (!circle) return;
-            const circumference = 2 * Math.PI * 45;
-            const offset = circumference - (percent / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
+            setTimeout(() => {
+                const circle = document.getElementById(id);
+                if (!circle) return;
+                const offset = 283 - (percent / 100) * 283;
+                circle.style.strokeDashoffset = offset;
+            }, 300);
         }
 
         function safeBase64Decode(str) {
             try {
                 let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-                while (base64.length % 4) {
-                    base64 += '=';
-                }
+                while (base64.length % 4) base64 += '=';
                 const binaryStr = atob(base64);
                 const bytes = new Uint8Array(binaryStr.length);
-                for (let i = 0; i < binaryStr.length; i++) {
-                    bytes[i] = binaryStr.charCodeAt(i);
-                }
+                for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
                 return new TextDecoder('utf-8').decode(bytes);
             } catch (e) {
                 try { return atob(str); } catch (err) { return str; }
@@ -633,87 +426,39 @@
         }
 
         function fetchConfigs() {
-            let url = core.sub || window.location.href;
-            fetch(url)
-                .then(r => r.text())
-                .then(txt => {
-                    let decoded = txt.trim();
-                    if (/^[A-Za-z0-9+/=\s_-]+$/.test(decoded) && !decoded.includes('://')) {
-                        decoded = safeBase64Decode(decoded.replace(/\s/g, ''));
-                    }
-                    allConfigLines = decoded.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 5 && l.includes('://'));
-                    renderProtocolChips();
-                    filterConfigs();
-                })
-                .catch(() => {
-                    document.getElementById('config-list').innerHTML = `<div class="empty-state">خطا در بارگذاری کانفیگ‌ها</div>`;
-                });
+            let url = getAbsoluteSubUrl();
+            fetch(url).then(r => r.text()).then(txt => {
+                let decoded = txt.trim();
+                if (/^[A-Za-z0-9+/=\s_-]+$/.test(decoded) && !decoded.includes('://')) {
+                    decoded = safeBase64Decode(decoded.replace(/\s/g, ''));
+                }
+                allConfigLines = decoded.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 5 && l.includes('://'));
+                renderProtocolChips();
+                filterConfigs();
+            }).catch(() => {
+                document.getElementById('config-list').innerHTML = `<div class="empty-state"><div>خطا در دریافت لیست کانفیگ‌ها</div></div>`;
+            });
         }
 
-        function getProto(line) {
-            return (line.split('://')[0] || 'CONFIG').toUpperCase();
-        }
+        function getProto(line) { return (line.split('://')[0] || 'CONFIG').toUpperCase(); }
 
         function getConfigName(line, i) {
             if (line.toLowerCase().startsWith('vmess://')) {
                 try {
                     const b64 = line.substring(8).trim();
-                    const rawJson = safeBase64Decode(b64);
-                    const obj = JSON.parse(rawJson);
+                    const obj = JSON.parse(safeBase64Decode(b64));
                     if (obj && obj.ps) return String(obj.ps).trim();
                 } catch (e) {}
             }
-
             if (line.includes('#')) {
-                try {
-                    return decodeURIComponent(line.substring(line.indexOf('#') + 1)).trim();
-                } catch (e) {
-                    return line.substring(line.indexOf('#') + 1).trim();
-                }
+                try { return decodeURIComponent(line.substring(line.indexOf('#') + 1)).trim(); }
+                catch (e) { return line.substring(line.indexOf('#') + 1).trim(); }
             }
-
             return `Config ${i + 1}`;
         }
 
-        function detectCountryFlag(text) {
-            const flagMap = {
-                'DE': '🇩🇪', 'GERMANY': '🇩🇪', 'آلمان': '🇩🇪',
-                'US': '🇺🇸', 'USA': '🇺🇸', 'AMERICA': '🇺🇸', 'آمریکا': '🇺🇸',
-                'FR': '🇫🇷', 'FRANCE': '🇫🇷', 'فرانسه': '🇫🇷',
-                'GB': '🇬🇧', 'UK': '🇬🇧', 'ENGLAND': '🇬🇧', 'انگلیس': '🇬🇧',
-                'NL': '🇳🇱', 'NETHERLANDS': '🇳🇱', 'هلند': '🇳🇱',
-                'TR': '🇹🇷', 'TURKEY': '🇹🇷', 'ترکیه': '🇹🇷',
-                'FI': '🇫🇮', 'FINLAND': '🇫🇮', 'فنلاند': '🇫🇮',
-                'IR': '🇮🇷', 'IRAN': '🇮🇷', 'ایران': '🇮🇷',
-                'CA': '🇨🇦', 'CANADA': '🇨🇦', 'کانادا': '🇨🇦',
-                'PL': '🇵🇱', 'POLAND': '🇵🇱', 'لهستان': '🇵🇱',
-                'IT': '🇮🇹', 'ITALY': '🇮🇹', 'ایتالیا': '🇮🇹',
-                'SE': '🇸🇪', 'SWEDEN': '🇸🇪', 'سوئد': '🇸🇪',
-                'CH': '🇨🇭', 'SWITZERLAND': '🇨🇭', 'سوئیس': '🇨🇭',
-                'RU': '🇷🇺', 'RUSSIA': '🇷🇺', 'روسیه': '🇷🇺',
-                'AE': '🇦🇪', 'UAE': '🇦🇪', 'امارات': '🇦🇪'
-            };
-
-            const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/;
-            const match = text.match(emojiRegex);
-            if (match) return match[0];
-
-            const words = text.toUpperCase().split(/[-_\s|:]+/);
-            for (let word of words) {
-                if (flagMap[word]) return flagMap[word];
-            }
-            return '🌐';
-        }
-
         function protoColor(proto) {
-            const map = {
-                VLESS: 'var(--proto-vless)',
-                VMESS: 'var(--proto-vmess)',
-                TROJAN: 'var(--proto-trojan)',
-                SS: 'var(--proto-ss)',
-                SHADOWSOCKS: 'var(--proto-ss)',
-                OVPN: 'var(--proto-ovp)'
-            };
+            const map = { VLESS: 'var(--proto-vless)', VMESS: 'var(--proto-vmess)', TROJAN: 'var(--proto-trojan)', SS: 'var(--proto-ss)', SHADOWSOCKS: 'var(--proto-ss)', OVPN: 'var(--proto-ovp)' };
             return map[proto] || 'var(--proto-default)';
         }
 
@@ -726,27 +471,17 @@
         function updateCompactViewUI() {
             const list = document.getElementById('config-list');
             const icon = document.getElementById('view-icon');
-            if (list) {
-                if (isCompactView) list.classList.add('compact-view');
-                else list.classList.remove('compact-view');
-            }
-            if (icon) {
-                icon.className = isCompactView ? 'ri-list-check-2' : 'ri-layout-grid-line';
-            }
+            if (list) list.classList.toggle('compact-view', isCompactView);
+            if (icon) icon.className = isCompactView ? 'ri-list-check-2' : 'ri-layout-grid-line';
         }
 
         function renderProtocolChips() {
             const wrap = document.getElementById('protocol-chips');
             const protos = Array.from(new Set(allConfigLines.map(getProto)));
-            if (protos.length <= 1) {
-                wrap.style.display = 'none';
-                return;
-            }
+            if (protos.length <= 1) { wrap.style.display = 'none'; return; }
             wrap.style.display = 'flex';
             let html = `<div class="chip ${activeProtocolFilter === 'ALL' ? 'active' : ''}" onclick="setProtocolFilter('ALL')">${i18n[currentLang].all_chip}</div>`;
-            protos.forEach(p => {
-                html += `<div class="chip ${activeProtocolFilter === p ? 'active' : ''}" onclick="setProtocolFilter('${p}')">${p}</div>`;
-            });
+            protos.forEach(p => { html += `<div class="chip ${activeProtocolFilter === p ? 'active' : ''}" onclick="setProtocolFilter('${p}')">${p}</div>`; });
             wrap.innerHTML = html;
         }
 
@@ -759,12 +494,8 @@
         function filterConfigs() {
             const q = (document.getElementById('config-search')?.value || '').trim().toLowerCase();
             let filtered = allConfigLines;
-            if (activeProtocolFilter !== 'ALL') {
-                filtered = filtered.filter(l => getProto(l) === activeProtocolFilter);
-            }
-            if (q) {
-                filtered = filtered.filter((l, i) => getConfigName(l, i).toLowerCase().includes(q) || getProto(l).toLowerCase().includes(q));
-            }
+            if (activeProtocolFilter !== 'ALL') filtered = filtered.filter(l => getProto(l) === activeProtocolFilter);
+            if (q) filtered = filtered.filter((l, i) => getConfigName(l, i).toLowerCase().includes(q) || getProto(l).toLowerCase().includes(q));
             renderConfigList(filtered);
         }
 
@@ -772,20 +503,15 @@
             const container = document.getElementById('config-list');
             container.innerHTML = '';
             if (lines.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div style="font-weight:700;">${i18n[currentLang].no_results_title}</div>
-                        <div style="font-size:0.8rem; margin-top:5px;">${i18n[currentLang].no_results_sub}</div>
-                    </div>`;
+                container.innerHTML = `<div class="empty-state"><div>${i18n[currentLang].no_results_title}</div></div>`;
                 return;
             }
 
+            const fragment = document.createDocumentFragment();
             lines.forEach((line, i) => {
                 const proto = getProto(line);
                 const name = getConfigName(line, i);
-                const flag = detectCountryFlag(name);
-                const simulatedPing = 65 + ((i * 17) % 75);
-                const isModerate = simulatedPing > 105;
+                const simulatedPing = 60 + ((i * 17) % 75);
 
                 const card = document.createElement('div');
                 card.className = 'config-card';
@@ -794,13 +520,10 @@
                 card.innerHTML = `
                     <div class="prot-icon" style="color:${protoColor(proto)}">${proto.substring(0, 4)}</div>
                     <div class="conf-info">
-                        <div class="conf-header">
-                            <span class="conf-flag">${flag}</span>
-                            <span class="conf-name">${escapeHtml(name)}</span>
-                        </div>
+                        <div class="conf-name">${escapeHtml(name)}</div>
                         <div class="conf-meta-row">
                             <span class="conf-meta">${proto}</span>
-                            <span class="ping-pill ${isModerate ? 'moderate' : ''}">
+                            <span class="ping-pill ${simulatedPing > 105 ? 'moderate' : ''}">
                                 <span class="ping-dot"></span>${simulatedPing}ms
                             </span>
                         </div>
@@ -809,16 +532,11 @@
                     <button class="action-icon qr-btn"><i class="ri-qr-code-line"></i></button>
                 `;
 
-                card.querySelector('.copy-btn').addEventListener('click', function() {
-                    copyTxt(line, this);
-                });
-
-                card.querySelector('.qr-btn').addEventListener('click', function() {
-                    showQR(line);
-                });
-
-                container.appendChild(card);
+                card.querySelector('.copy-btn').addEventListener('click', function() { copyTxt(line, this); });
+                card.querySelector('.qr-btn').addEventListener('click', function() { showQR(line); });
+                fragment.appendChild(card);
             });
+            container.appendChild(fragment);
         }
 
         function escapeHtml(str) {
@@ -827,63 +545,41 @@
             return div.innerHTML;
         }
 
-        function copyLink() {
-            copyTxt(window.location.href);
-        }
-
-        function copyAll() {
-            if (allConfigLines.length) copyTxt(allConfigLines.join('\n'));
-        }
+        function copyLink() { copyTxt(getAbsoluteSubUrl()); }
+        function copyAll() { if (allConfigLines.length) copyTxt(allConfigLines.join('\n')); }
 
         function copyTxt(txt, btn) {
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(txt).then(() => {
-                    showToast();
-                    if (btn) flashCopied(btn);
-                }).catch(() => fallbackCopy(txt, btn));
-            } else {
-                fallbackCopy(txt, btn);
-            }
+                navigator.clipboard.writeText(txt).then(() => { showToast(); if (btn) flashCopied(btn); }).catch(() => fallbackCopy(txt, btn));
+            } else { fallbackCopy(txt, btn); }
         }
 
         function fallbackCopy(txt, btn) {
             const ta = document.createElement('textarea');
-            ta.value = txt;
-            ta.style.position = 'fixed';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                document.execCommand('copy');
-                showToast();
-                if (btn) flashCopied(btn);
-            } catch (err) {}
+            ta.value = txt; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); showToast(); if (btn) flashCopied(btn); } catch (err) {}
             document.body.removeChild(ta);
         }
 
         function flashCopied(btn) {
+            if (!btn) return;
             const icon = btn.querySelector('i');
             if (!icon) return;
             const oldClass = icon.className;
             icon.className = 'ri-check-line';
             btn.classList.add('copied');
-            setTimeout(() => {
-                icon.className = oldClass;
-                btn.classList.remove('copied');
-            }, 1200);
+            setTimeout(() => { icon.className = oldClass; btn.classList.remove('copied'); }, 1000);
         }
 
         function showToast() {
             const t = document.getElementById('toast');
             document.getElementById('toast-msg').textContent = i18n[currentLang].copied;
             t.classList.add('active');
-            setTimeout(() => t.classList.remove('active'), 2000);
+            setTimeout(() => t.classList.remove('active'), 1800);
         }
 
-        function showMainQR() {
-            showQR(window.location.href);
-        }
-
+        function showMainQR() { showQR(getAbsoluteSubUrl()); }
         function showQR(txt) {
             const el = document.getElementById('qr-display');
             el.innerHTML = '';
@@ -891,13 +587,9 @@
             document.getElementById('modal').classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
         function toggleSection(id, header) {
-            const el = document.getElementById(id);
-            el.classList.toggle('open');
+            document.getElementById(id).classList.toggle('open');
             header.classList.toggle('active-section');
         }
 
@@ -908,13 +600,8 @@
         }
 
         function setTheme(t) {
-            if (t === 'light') {
-                document.body.classList.add('light-theme');
-                document.getElementById('theme-icon').className = 'ri-sun-line';
-            } else {
-                document.body.classList.remove('light-theme');
-                document.getElementById('theme-icon').className = 'ri-moon-clear-line';
-            }
+            document.body.classList.toggle('light-theme', t === 'light');
+            document.getElementById('theme-icon').className = t === 'light' ? 'ri-sun-line' : 'ri-moon-clear-line';
         }
 
         function cycleLang() {
